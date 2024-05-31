@@ -36,29 +36,20 @@ export default function Form() {
   // Handle form submission
   const onSubmit: SubmitHandler<UserType> = async (data) => {
     if (formType === "signIn") {
-     loginUser(data.userData as { username: string; password: string; }).then((response)=>{
-      if(response?.status === 'success'){
-        console.log('user logged in')
-        router.push('/dashboard')
-      }
-     }).catch((error)=>{
+     loginUser(data.userData as { username: string; password: string; }).catch((error)=>{
+       console.log(error)
       console.log(error.message)
       setError(error.message)
     })
     } else {
-      await createUser(data.userData as { email: string; user_password: string; }).then((response)=>{
-        if(response?.status === 'success'){
-          console.log('user logged in')
-          router.push('/dashboard')
-        }
-       }).catch((error)=>{
-        console.log(error.message)
-        setError(error.message)
+      await createUser(data.userData as { email: string; user_password: string; }).catch((error)=>{
+        console.log(error.error)
+        setError(error.error)
       });
     }
   }; 
 
-   // password visibility toggle
+
   // password visibility toggle
   const handlePasswordVisibility = (form: "signIn" | "signUp") => {
     setShowPassword((prev) => ({ ...prev, [form]: !prev[form] }));
