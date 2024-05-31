@@ -21,7 +21,7 @@ export default function Menu() {
             name:"Home",
             icon:"home.svg" ,
             icon_active:"home_b.svg",
-            link:"/"
+            link:"/dashboard"
 
         },
         {
@@ -43,7 +43,7 @@ export default function Menu() {
 
 
   return (
-    <div className="md:w-[14rem] xl:w-[16rem]  h-full fixed  hidden md:flex flex-col gap-2 p-2">
+    <div className="md:w-[12rem] lg:w-[16rem]  h-full fixed  hidden md:flex flex-col gap-2 p-2">
       <div className="w-full flex-none h-[10rem] bg-sky-600 rounded-[10px]"></div>
       <div className="flex flex-col gap-2">
         {menuItems.map((item,index)=>(
@@ -54,8 +54,9 @@ export default function Menu() {
           {pathName === item.link ?
           <Image src={`/icons/${item.icon_active}`} width={24} height={24} alt={item.name} className="group-hover/x:hidden"/> 
           : <Image src={`/icons/${item.icon}`}  width={24} height={24} alt={item.name} className="group-hover/x:hidden"/>
-          }</div>
+          }
           <Image src={`/icons/${item.icon_active}`} width={24} height={24} alt={item.name} className="group-hover/x:block hidden"/> 
+          </div>
           <p className={cn("text-black hover:text-blue-700",{
             "text-blue-700": pathName === item.link
           })}>{item.name}</p>
