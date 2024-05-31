@@ -1,8 +1,10 @@
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function Card() {
   return (
-    <div className='w-full md:w-[16rem] lg:w-[20rem] xl:w-[23rem] h-[17rem] border-2 flex-none rounded-[25px] border-black/10 p-2 cursor-pointer'>
+    <Link href="/video/1">
+    <div className='w-full md:w-[16rem] lg:w-[20rem] xl:w-[23rem] h-[17rem] border-2 hover:border-sky-500/60 flex-none rounded-[25px] border-black/10 p-2 cursor-pointer'>
         <div className='w-full h-[70%] rounded-[23px] border border-black/10'></div>
         <div className='w-full flex justify-between gap-2 pt-2 px-2'>
            <div className='w-[85%]'>
@@ -13,6 +15,8 @@ export default function Card() {
             <Image src="/icons/dot.svg" width={20} height={20} alt="dot icon" />
            </div>
         </div>
+        
     </div>
+    </Link>
   )
 }

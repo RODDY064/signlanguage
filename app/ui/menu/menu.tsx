@@ -57,7 +57,7 @@ export default function Menu() {
           }
           <Image src={`/icons/${item.icon_active}`} width={24} height={24} alt={item.name} className="group-hover/x:block hidden"/> 
           </div>
-          <p className={cn("text-black hover:text-blue-700",{
+          <p className={cn("text-black group-hover/x:text-blue-700",{
             "text-blue-700": pathName === item.link
           })}>{item.name}</p>
          </Link>
