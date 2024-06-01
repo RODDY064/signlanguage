@@ -4,6 +4,7 @@ import Image from "next/image"
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "../../../utils/cn";
+import { signOut } from 'next-auth/react';
 
 interface MenuItem { 
     name: string;
@@ -65,7 +66,7 @@ export default function Menu() {
         }
       </div>
       <div className="w-full h-full bg-gray-100 rounded-[10px]"></div>
-      <div className="w-full h-14 hover:bg-sky-100 group flex-none rounded-[10px] bg-gray-100 cursor-pointer flex gap-2 items-center px-4">
+      <div onClick={()=>signOut({callbackUrl:"http://localhost:3000/"})}  className="w-full h-14 hover:bg-sky-100 group flex-none rounded-[10px] bg-gray-100 cursor-pointer flex gap-2 items-center px-4">
         <Image src="/icons/logout.svg" width={24} height={24} alt="logout" className="group-hover:hidden"/>
         <Image src="/icons/logout_b.svg" width={24} height={24} alt="logout" className="group-hover:flex hidden"/>
         <p className="text-black group-hover:text-blue-700">Logout</p>

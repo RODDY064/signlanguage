@@ -36,18 +36,33 @@ export default function Form() {
   // Handle form submission
   const onSubmit: SubmitHandler<UserType> = async (data) => {
     if (formType === "signIn") {
-     loginUser(data.userData as { username: string; password: string; }).catch((error)=>{
-       console.log(error)
-      console.log(error.message)
-      setError(error.message)
-    })
+        try {
+            const result = await loginUser(data.userData as { username: string; password: string; });
+            if (result.error) {
+                console.log(result.error);
+                setError(result.error);
+            } else {
+                // Handle successful login if needed
+            }
+        } catch (error:any) {
+            console.error("Unexpected error:", error);
+            setError(error.toString());
+        }
     } else {
-      await createUser(data.userData as { email: string; user_password: string; }).catch((error)=>{
-        console.log(error.error)
-        setError(error.error)
-      });
+        try {
+            const result = await createUser(data.userData as { email: string; user_password: string; });
+            if (result.status === "error") {
+                console.log(result.message);
+                setError(result.message);
+            } else {
+                // Handle successful account creation if needed
+            }
+        } catch (error) {
+            console.log(error);
+            setError(error as string);
+        }
     }
-  }; 
+};
 
 
   // password visibility toggle
@@ -180,11 +195,16 @@ export default function Form() {
                   </div>
                 </div>
                   <div className="text-sm item-center justify-center flex gap-1 text-red-600 py-2">
-                  {errors.userData && "email" in errors.userData && (
-                    <p>{(errors.userData.email as { message: string }).message} & </p>
-                  )}
-                  {errors.userData && "user_password" in errors.userData && (
-                    <p>{(errors.userData.user_password as { message: string }).message}</p>
+                  {Error && <p>{Error}</p>}
+                  {!Error && (
+                    <>
+                      {errors.userData && "email" in errors.userData && (
+                        <p>{(errors.userData.email as { message: string }).message} & </p>
+                      )}
+                      {errors.userData && "user_password" in errors.userData && (
+                        <p>{(errors.userData.user_password as { message: string }).message}</p>
+                      )}
+                    </>
                   )}
                 </div>
               </div>

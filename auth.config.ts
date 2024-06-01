@@ -32,7 +32,7 @@ export default {
            } }
     
         if (!user) {
-          throw new Error('Invalid username or password. Please try again.')
+          throw new Error('User not found.')
         }
  
         // return user object with their profile data
@@ -42,5 +42,6 @@ export default {
   ],
   pages: {
     signIn: "/",
+    signOut: "/",
   },
 } as NextAuthConfig; // Add type assertion
