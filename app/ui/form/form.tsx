@@ -2,7 +2,7 @@
 
 import { cn } from "@/utils/cn";
 import Image from "next/image";
-import { useState ,useEffect , useTransition } from "react";
+import { useState ,useEffect  } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -18,7 +18,7 @@ export default function Form() {
   const [showPassword, setShowPassword] = useState({ signIn: false, signUp: false });
   const [formType, setFormType] = useState<"signIn" | "signUp">("signIn");
   const [Error,setError] = useState<string|null>();
-  const router = useRouter();
+
 
 
   // UseForm with the dynamic schema

@@ -40,6 +40,7 @@ export default {
       },
     }),
   ],
+  database:"",
   pages: {
     signIn: "/",
     signOut: "/",
