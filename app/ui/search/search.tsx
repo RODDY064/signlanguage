@@ -1,9 +1,20 @@
 "use client"
 import { cn } from "@/utils/cn"
 import Image from "next/image"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 
 
 export default function Search({className}:{className?:string}) {
+  const searchParams = useSearchParams()
+  const pathName = usePathname()
+  const { replace } = useRouter()
+
+
+  const handleSearch = (term:string)=>{
+    
+  }
+
+
   return (
     <div className={cn("w-full px-4 md:px-0 full flex flex-col items-center",className)}>
         <div className="w-full md:w-[25rem] lg:w-[30rem] h-12 bg-white border border-black/20 flex rounded-[25px]">
