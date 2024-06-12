@@ -72,26 +72,18 @@ export default function Edit() {
         
         <div className="w-full mt-2 px-4">
           <form onSubmit={handleSubmit(onSubmit)}>
-            <label className="text-[15px] font-medium">Title</label>
-            <input
-              type="text"
-              {...register("title")}
-              name="title"
-              className="w-full bg-transparent border focus:outline-none border-black/20 focus:border-blue-500/70 rounded-[8px] p-2 mt-2 mb-2"
-            />
-             {errors.title && <p className="text-red-500 text-sm mb-2 font-light">{errors.title.message}</p>}
             <label className="text-[15px] font-medium">Description</label>
             <textarea
               {...register("description")}
               name="description"
-              className="w-full min-h-[200px] max-h-[200px] bg-transparent border focus:outline-none border-black/20 focus:border-blue-500/70 
+              className="w-full min-h-[230px] max-h-[230px] bg-transparent border focus:outline-none border-black/20 focus:border-blue-500/70 
                rounded-[8px] p-2 mt-2 mb-2"
             />
              {errors.description && <p className="text-red-500 text-sm font-light mb-2">{errors.description.message}</p>}
             <div className="flex flex-col items-center justify-center w-full 2xl:mt-10">
               <label
                 htmlFor="dropzone-file"
-                className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-sky-100"
+                className="flex flex-col items-center justify-center w-full h-[10rem] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-sky-100"
               >
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
                   <svg

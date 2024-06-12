@@ -10,7 +10,7 @@ export default function VideoContainer({videoData}:{videoData:any}) {
 
   return (
     <div className="w-full flex-[2] md:w-[45rem] 2xl:w-[1280px] max-sm:mb-10">
-      <div className="w-full  h-[20rem] p-6  2xl:h-[740px]  md:h-[26rem] rounded-[35px] border border-black/10 relative md:mt-10 xl:mt-0 overflow-hidden">
+      <div className="w-full  h-[20rem]   2xl:h-[740px]  md:h-[26rem] rounded-[20px] border border-black/10 relative md:mt-10 xl:mt-0 overflow-hidden">
         <video controls className="w-full h-full">
           <source src={videoData.attributes.video_url} type="video/mp4"/>
         </video>

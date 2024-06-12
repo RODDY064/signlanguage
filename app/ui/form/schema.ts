@@ -21,7 +21,6 @@ export const UserSchema = z.object({
 
 
 export const updateDataSchema = z.object({
-  title: z.string().min(1, 'Title field cannot be empty'),
   description: z.string().min(1, 'Description cannot be empty'),
   video: z
     .instanceof(File)
