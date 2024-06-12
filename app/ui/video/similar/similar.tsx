@@ -24,7 +24,7 @@ const SimilarCard = () => {
     <div className='w-full h-[13rem] border border-gray-300/70 rounded-[35px]   overflow-hidden cursor-pointer group/g'>
      <div className="w-full h-full relative">
       <Image src="/images/health.jpg" fill className='object-cover' alt='health'/>
-      <div className='absolute w-full h-full p-6 bg-black/40 group-hover/g:bg-black/50 flex flex-col justify-end'>
+      <div className='absolute w-full h-full p-6 bg-black/40 group-hover/g:bg-black/60 flex flex-col justify-end'>
       <h3 className='text-xl font-medium text-white'>Hello</h3>
       </div>
      </div>
