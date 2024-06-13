@@ -98,9 +98,9 @@ export async function updateData(data: z.infer<typeof updateDataSchema>) {
     if(validateData.success){
         try {
 
-            const { title, description, video} = validateData.data
+            const {description, video} = validateData.data
              
-            console.log(title,description)      
+            console.log(description)      
             if(video){
                 console.log(video)
             }
