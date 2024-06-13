@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { getSignData } from "@/app/server/data"
 import Search from "@/app/ui/search/search"
 import Container from "@/app/ui/video/container"
