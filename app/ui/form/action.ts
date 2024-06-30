@@ -25,12 +25,14 @@ export async function loginUser(data: z.infer<typeof SignInSchema>) {
           redirectTo:"/dashboard"
       });
 
-      return { status: "success" };
+      return { status: "success"  };
   } catch (error) {
       if (error instanceof AuthError) {
           switch (error.type) {
               case "CredentialsSignin":
                   return { status: "error", error: "Invalid Credentials" };
+             case "CallbackRouteError": 
+                  return { status : "error" , error:"Invalid username or password. Please try again."}
               default:
                   return { status: "error", error: "Something went wrong" };
           }

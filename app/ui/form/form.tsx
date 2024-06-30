@@ -42,7 +42,7 @@ export default function Form() {
                 console.log(result.error);
                 setError(result.error);
             } else {
-                // Handle successful login if needed
+                setError('')
             }
         } catch (error:any) {
             console.error("Unexpected error:", error);

@@ -2,8 +2,9 @@
 
 export async function getSignData(){
     try {
-        const response = await fetch('https://popular-birds-9e1d0b64bf.strapiapp.com/api/signs',{
+        const response = await fetch('https://popular-birds-9e1d0b64bf.strapiapp.com/api/signs?pagination[pageSize]=267',{
             method:"GET",
+             cache: 'no-cache',
             headers:{
                 "content-type":"application/json"
             }
@@ -12,7 +13,7 @@ export async function getSignData(){
 
         const dataJson = await response.json();
 
-        // console.log(dataJson)
+        // console.log(dataJson.data)
 
         if (!response.ok) {
             throw new Error(dataJson.message || "Fail to fetch data")
@@ -29,7 +30,7 @@ export async function getSignData(){
 
 export async function getSimilarData({noOfItems, currentItemID }:{noOfItems:number,currentItemID:number}){
     try {
-        const response = await fetch('https://popular-birds-9e1d0b64bf.strapiapp.com/api/signs',{
+        const response = await fetch('https://popular-birds-9e1d0b64bf.strapiapp.com/api/signs',{     
             method:"GET",
             headers:{
                 "content-type":"application/json"

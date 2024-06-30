@@ -32,20 +32,15 @@ export default function Menu() {
             link:"/history"
 
         },
-        {
-            name:"Settings",
-            icon:"setting.svg",
-            icon_active:"setting_b.svg",
-            link:"/settings"
-
-        }
     ]
 
 
 
   return (
     <div className="md:w-[12rem] lg:w-[16rem]  h-full fixed  hidden md:flex flex-col gap-2 p-2">
-      <div className="w-full flex-none h-[10rem] bg-sky-600 rounded-[10px]"></div>
+      <div className="w-full flex-none h-[10rem] bg-sky-600 rounded-[10px] items-end flex p-4 xl:p-6 justify-end">
+        <Image src="/icons/logo_w.svg" width={130} height={130} alt="logo" />
+      </div>
       <div className="flex flex-col gap-2">
         {menuItems.map((item,index)=>(
           <Link href={item.link} key={index} className={cn("w-full h-14 group/x rounded-[10px] hover:bg-sky-100 bg-gray-100  flex items-center cursor-pointer px-4 gap-2 transition-all duration-10",{

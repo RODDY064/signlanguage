@@ -12,7 +12,9 @@ export default function Nav() {
 
   return (
     <div className='w-full md:w-auto px-2 py-4  z-20 md:p-4 flex justify-between md:justify-end absolute md:right-2  '>
-      <h1 className='md:hidden'>logo</h1>
+      <h1 className='md:hidden p-2'>
+        <Image src="/icons/logo.svg" width={130} height={130} alt="logo"/>
+      </h1>
       <div className='cursor-pointer md:hidden'>
         <Image src="/icons/menu.svg" width={35} height={35} alt="menu"/>
       </div>
