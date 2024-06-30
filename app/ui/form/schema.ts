@@ -6,6 +6,8 @@ export const SignInSchema = z.object({
 });
 
 export const CreateUserSchema = z.object({
+  firstname: z.string().min(1, { message: "First Name cannot be empty" }),
+  lastname: z.string().min(1, { message: "Last Name cannot be empty" }),
   email: z.string().email({ message: "Invalid email" }),
   user_password: z.string().min(1, { message: "Password cannot be empty" })
 });

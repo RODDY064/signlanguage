@@ -19,7 +19,7 @@ export default {
         let user = null
         // Find user by username and password 
          
-        user = await fetch(`${process.env.LOGIN_API_URL}`,{
+        user = await fetch(`${process.env.API_BASE_URL}/custom-user/login`,{
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

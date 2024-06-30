@@ -4,10 +4,7 @@ import { z } from "zod";
 import { CreateUserSchema, SignInSchema, updateDataSchema } from "./schema";
 import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
-import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcryptjs";
 
-const prisma = new PrismaClient();
 
 export async function loginUser(data: z.infer<typeof SignInSchema>) {
   // Validate data using Zod
@@ -54,41 +51,49 @@ export async function createUser(data: z.infer<typeof CreateUserSchema>) {
 
     try {
 
-        const { email , user_password } = validateData.data;
-         
+        const data = validateData.data;
+
+    
         // check if user already exists
-        const userExists = await prisma.user.findUnique({
-            where: {
-                email: email
+        const user = await fetch(`${process.env.API_BASE_URL}/custom-user/register`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 
+                username: data.email,
+                firstname: data.firstname,
+                lastname: data.lastname,
+                password: data.user_password
+            
+            })
+        }).then(async (res) => {
+            if (res.ok && res.status === 200) {
+                const data = await res.json()
+    
+                return data.user
+            }else if (res.status === 400) {
+                const data = await res.json()
+                 const error = data.error
+                 throw new Error(error.message)
             }
-        });
-
-
-         if(userExists){
-            console.log("User already exists");
-            return { status: "error", message: "User already exists" };
-         }
-
-
-        const hashedPassword = await bcrypt.hash(user_password, 10);
-        
-        const user = await prisma.user.create({
-            data: {
-                email: email,
-                password: hashedPassword,
+             else {
+                return null
             }
-        });
+        })
 
-        console.log(user);
-
+     
         if (user) {
             return { status: "success", message: "Account created successfully" };
         } else {
             return { status: "error", message: "An error occurred. Please try again." };
         }
-    } catch (error) {
-        console.log(error);
-        return { status: "error", message: "An error occurred. Please try again." };
+    } catch (error:any) {
+        console.log(error.message); 
+        if(error.message === 'User already exists.'){
+            return { status: "error", message: "User already exists. Please sign in" };
+        }
+        return { status: "error", message: "An error occurred oppp. Please try again." };
     }
   }
 

@@ -2,74 +2,100 @@
 
 import { cn } from "@/utils/cn";
 import Image from "next/image";
-import { useState ,useEffect  } from "react";
+import { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { loginUser, createUser } from "./action";
 import { UserSchema } from "./schema";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 // Define the types
 type UserType = z.infer<typeof UserSchema>;
 
 export default function Form() {
-  const [showPassword, setShowPassword] = useState({ signIn: false, signUp: false });
+  const [showPassword, setShowPassword] = useState({
+    signIn: false,
+    signUp: false,
+  });
   const [formType, setFormType] = useState<"signIn" | "signUp">("signIn");
-  const [Error,setError] = useState<string|null>();
+  const [Error, setError] = useState<string | null>();
+  const [loading, setLoading] = useState(false);
 
-
+  useEffect(() => {
+    console.log(Error);
+  }, [Error]);
 
   // UseForm with the dynamic schema
-  const { register, handleSubmit, reset, formState: { errors }, getValues } = useForm<UserType>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+    getValues,
+  } = useForm<UserType>({
     defaultValues: { type: formType },
     resolver: zodResolver(UserSchema),
   });
-  
+
   useEffect(() => {
     reset({ type: formType });
-    Error && setError(null)
-  }, [formType,reset]);
+    Error && setError(null);
+  }, [formType, reset]);
 
+  
 
   // Handle form submission
   const onSubmit: SubmitHandler<UserType> = async (data) => {
     if (formType === "signIn") {
-        try {
-            const result = await loginUser(data.userData as { username: string; password: string; });
-            if (result.error) {
-                console.log(result.error);
-                setError(result.error);
-            } else {
-                setError('')
-            }
-        } catch (error:any) {
-            console.error("Unexpected error:", error);
-            setError(error.toString());
+      try {
+        const result = await loginUser(
+          data.userData as { username: string; password: string }
+        );
+        if (result.error) {
+          console.log(result.error);
+          setError(result.error);
+        } else {
+          setError("");
+          reset({ type: formType });
         }
+      } catch (error: any) {
+        console.error("Unexpected error:", error);
+        setError(error.toString());
+      }
     } else {
-        try {
-            const result = await createUser(data.userData as { email: string; user_password: string; });
-            if (result.status === "error") {
-                console.log(result.message);
-                setError(result.message);
-            } else {
-                // Handle successful account creation if needed
-            }
-        } catch (error) {
-            console.log(error);
-            setError(error as string);
+      try {
+        const result = await createUser(
+          data.userData as {
+            firstname: string;
+            lastname: string;
+            email: string;
+            user_password: string;
+          }
+        );
+        if (result.status === "error") {
+          console.log(result.message);
+          setError(result.message);
+        } else {
+          setLoading(true);
+          setError(result.message);
+          setTimeout(() => {
+             reset()
+            setFormType("signIn");
+            setLoading(false);
+          }, 3000);
         }
+      } catch (error) {
+        console.log(error);
+        setError(error as string);
+      }
     }
-};
-
+  };
 
   // password visibility toggle
   const handlePasswordVisibility = (form: "signIn" | "signUp") => {
     setShowPassword((prev) => ({ ...prev, [form]: !prev[form] }));
   };
-
 
   return (
     <div className="w-full md:w-auto flex flex-col items-center">
@@ -81,11 +107,12 @@ export default function Form() {
       </p>
       <div className="w-[80%] md:w-[26rem] h-12 bg-gray-100 rounded-[8px] p-1 flex gap-2">
         <div
-          onClick={() => setFormType('signIn')}
+          onClick={() => setFormType("signIn")}
           className={cn(
             "w-[50%] h-full rounded-[6px] flex items-center justify-center cursor-pointer",
             { "bg-white": formType === "signIn" }
-          )}>
+          )}
+        >
           <p className="text-md font-[500]">Sign In</p>
         </div>
         <div
@@ -93,7 +120,8 @@ export default function Form() {
           className={cn(
             "w-[50%] h-full rounded-[6px] flex items-center justify-center cursor-pointer",
             { "bg-white": formType === "signUp" }
-          )}>
+          )}
+        >
           <p className="text-md font-[500]">Sign Up</p>
         </div>
       </div>
@@ -103,9 +131,14 @@ export default function Form() {
             <>
               <div className="w-full md:w-[26rem] mt-4">
                 <label className="w-full px-1">Username</label>
-                <div className="w-full md:w-[26rem] h-12 flex bg-white border-2 border-gray-100 rounded-[10px]">
+                <div className="w-full focus-within:border-blue-500/70 md:w-[26rem] h-12 flex bg-white border-2 border-gray-100 rounded-[10px]">
                   <div className="h-full flex gap-2 items-center px-2">
-                    <Image src="/icons/email.svg" width={24} height={24} alt="email icon" />
+                    <Image
+                      src="/icons/email.svg"
+                      width={24}
+                      height={24}
+                      alt="email icon"
+                    />
                     <div className="w-[2.5px] h-[60%] bg-gray-100 rounded-lg"></div>
                   </div>
                   <input
@@ -119,9 +152,14 @@ export default function Form() {
               </div>
               <div className="w-full md:w-[26rem] mt-2">
                 <label className="w-full px-1">Password</label>
-                <div className="w-full md:w-[26rem] h-12 flex bg-white border-2 border-gray-100 rounded-[10px]">
+                <div className="w-full focus-within:border-blue-500/70 md:w-[26rem] h-12 flex bg-white border-2 border-gray-100 rounded-[10px]">
                   <div className="h-full flex gap-2 items-center px-2">
-                    <Image src="/icons/password.svg" width={24} height={24} alt="password icon" />
+                    <Image
+                      src="/icons/password.svg"
+                      width={24}
+                      height={24}
+                      alt="password icon"
+                    />
                     <div className="w-[2.5px] h-[60%] bg-gray-100 rounded-lg"></div>
                   </div>
                   <input
@@ -133,10 +171,23 @@ export default function Form() {
                   />
                   <div
                     onClick={() => handlePasswordVisibility("signIn")}
-                    className="px-2 h-full flex items-center justify-end cursor-pointer">
-                   {!showPassword.signIn ? 
-                    (<Image src="/icons/nonvisible.svg" width={24} height={24} alt="eye closed" />)
-                    :(<Image src="/icons/visible.svg" width={24} height={24} alt="eye open" />)}
+                    className="px-2 h-full flex items-center justify-end cursor-pointer"
+                  >
+                    {!showPassword.signIn ? (
+                      <Image
+                        src="/icons/nonvisible.svg"
+                        width={24}
+                        height={24}
+                        alt="eye closed"
+                      />
+                    ) : (
+                      <Image
+                        src="/icons/visible.svg"
+                        width={24}
+                        height={24}
+                        alt="eye open"
+                      />
+                    )}
                   </div>
                 </div>
                 <div className="text-sm flex items-center justify-center gap-1 text-red-600 py-2">
@@ -144,23 +195,57 @@ export default function Form() {
                   {!Error && (
                     <>
                       {errors.userData && "username" in errors.userData && (
-                        <p>{(errors.userData.username as { message: string }).message} & </p>
+                        <p>
+                          {
+                            (errors.userData.username as { message: string })
+                              .message
+                          }{" "}
+                          &{" "}
+                        </p>
                       )}
                       {errors.userData && "password" in errors.userData && (
-                        <p>{(errors.userData.password as { message: string }).message}</p>
+                        <p>
+                          {
+                            (errors.userData.password as { message: string })
+                              .message
+                          }
+                        </p>
                       )}
                     </>
                   )}
-                </div>          
+                </div>
               </div>
             </>
           ) : (
             <>
               <div className="w-full md:w-[26rem] mt-4">
+                <div className="w-full flex justify-between gap-2 my-2">
+                  <div className="w-full">
+                    <label className="w-full px-1">First Name</label>
+                    <input
+                      {...register("userData.firstname")}
+                      name="userData.firstname"
+                      className="w-full p-2 h-12 flex bg-white border-2 border-gray-100 rounded-[10px] focus:outline-none focus-within:border-blue-500/70"
+                    />
+                  </div>
+                  <div className="w-full">
+                    <label className="w-full px-1">Last Name</label>
+                    <input
+                      {...register("userData.lastname")}
+                      name="userData.lastname"
+                      className="w-full h-12 flex focus-within:border-blue-500/70 focus:outline-none p-2 bg-white border-2 border-gray-100 rounded-[10px]"
+                    />
+                  </div>
+                </div>
                 <label className="w-full px-1">Email</label>
-                <div className="w-full md:w-[26rem] h-12 flex bg-white border-2 border-gray-100 rounded-[10px]">
+                <div className="w-full md:w-[26rem] h-12 flex bg-white border-2 border-gray-100 rounded-[10px] focus-within:border-blue-500/70">
                   <div className="h-full flex gap-2 items-center px-2">
-                    <Image src="/icons/email.svg" width={24} height={24} alt="email icon" />
+                    <Image
+                      src="/icons/email.svg"
+                      width={24}
+                      height={24}
+                      alt="email icon"
+                    />
                     <div className="w-[2.5px] h-[60%] bg-gray-100 rounded-lg"></div>
                   </div>
                   <input
@@ -174,9 +259,14 @@ export default function Form() {
               </div>
               <div className="w-full md:w-[26rem] mt-2">
                 <label className="w-full px-1">Password</label>
-                <div className="w-full md:w-[26rem] h-12 flex bg-white border-2 border-gray-100 rounded-[10px]">
+                <div className="w-full md:w-[26rem] h-12 flex bg-white border-2 border-gray-100 rounded-[10px] focus-within:border-blue-500/70">
                   <div className="h-full flex gap-2 items-center px-2">
-                    <Image src="/icons/password.svg" width={24} height={24} alt="password icon" />
+                    <Image
+                      src="/icons/password.svg"
+                      width={24}
+                      height={24}
+                      alt="password icon"
+                    />
                     <div className="w-[2.5px] h-[60%] bg-gray-100 rounded-lg"></div>
                   </div>
                   <input
@@ -188,22 +278,84 @@ export default function Form() {
                   />
                   <div
                     onClick={() => handlePasswordVisibility("signUp")}
-                    className="px-2 h-full flex items-center justify-end cursor-pointer">
-                    {!showPassword.signUp ? 
-                    (<Image src="/icons/nonvisible.svg" width={24} height={24} alt="eye closed" />)
-                    :(<Image src="/icons/visible.svg" width={24} height={24} alt="eye open" />)}
+                    className="px-2 h-full flex items-center justify-end cursor-pointer"
+                  >
+                    {!showPassword.signUp ? (
+                      <Image
+                        src="/icons/nonvisible.svg"
+                        width={24}
+                        height={24}
+                        alt="eye closed"
+                      />
+                    ) : (
+                      <Image
+                        src="/icons/visible.svg"
+                        width={24}
+                        height={24}
+                        alt="eye open"
+                      />
+                    )}
                   </div>
                 </div>
-                  <div className="text-sm item-center justify-center flex gap-1 text-red-600 py-2">
+                <div className={`text-sm item-center justify-center flex gap-1 ${loading ? "text-green-600" : "text-red-600"} py-2`}>
                   {Error && <p>{Error}</p>}
                   {!Error && (
                     <>
-                      {errors.userData && "email" in errors.userData && (
-                        <p>{(errors.userData.email as { message: string }).message} & </p>
-                      )}
-                      {errors.userData && "user_password" in errors.userData && (
-                        <p>{(errors.userData.user_password as { message: string }).message}</p>
-                      )}
+                      {errors.userData &&
+                        (Object.keys(errors.userData).filter((key) =>
+                          [
+                            "firstname",
+                            "lastname",
+                            "email",
+                            "user_password",
+                          ].includes(key)
+                        ).length >= 2 ? (
+                          <p>All fields are required</p>
+                        ) : (
+                          <>
+                            {"firstname" in errors.userData && (
+                              <p>
+                                {
+                                  (
+                                    errors.userData.firstname as {
+                                      message: string;
+                                    }
+                                  ).message
+                                }
+                              </p>
+                            )}
+                            {"lastname" in errors.userData && (
+                              <p>
+                                {
+                                  (
+                                    errors.userData.lastname as {
+                                      message: string;
+                                    }
+                                  ).message
+                                }
+                              </p>
+                            )}
+                            {"email" in errors.userData && (
+                              <p>
+                                {
+                                  (errors.userData.email as { message: string })
+                                    .message
+                                }
+                              </p>
+                            )}
+                            {"user_password" in errors.userData && (
+                              <p>
+                                {
+                                  (
+                                    errors.userData.user_password as {
+                                      message: string;
+                                    }
+                                  ).message
+                                }
+                              </p>
+                            )}
+                          </>
+                        ))}
                     </>
                   )}
                 </div>
@@ -234,15 +386,29 @@ export default function Form() {
             <p className="text-black/60">or</p>
             <span className="w-full h-[2px] bg-black/20"></span>
           </div>
-          <div className="my-4 w-full h-12 flex items-center justify-center border-2 border-gray-100 rounded-[10px] cursor-pointer">
+          <div className="my-4 w-full h-12 flex items-center justify-center border-2 border-gray-100 rounded-[10px] cursor-pointer hover:bg-blue-100">
             <div className="flex items-center gap-2">
-              <Image src="/icons/google.svg" width={24} height={24} alt="google" />
+              <Image
+                src="/icons/google.svg"
+                width={24}
+                height={24}
+                alt="google"
+              />
               <p className="text-md">Google</p>
             </div>
           </div>
           <div className="my-4 w-full flex items-center justify-center gap-2">
-            <p>{formType === "signIn" ? "Don't have an account?" : "Already have an account?"}</p>
-            <p onClick={() => setFormType(formType === "signIn" ? "signUp" : "signIn")} className="text-blue-500 cursor-pointer">
+            <p>
+              {formType === "signIn"
+                ? "Don't have an account?"
+                : "Already have an account?"}
+            </p>
+            <p
+              onClick={() =>
+                setFormType(formType === "signIn" ? "signUp" : "signIn")
+              }
+              className="text-blue-500 cursor-pointer"
+            >
               {formType === "signIn" ? "Sign Up" : "Sign In"}
             </p>
           </div>
@@ -251,4 +417,3 @@ export default function Form() {
     </div>
   );
 }
-

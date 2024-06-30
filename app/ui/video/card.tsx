@@ -28,7 +28,7 @@ export default function Card({ video }:{video:any}) {
     <Link href={`/video/${video.id}`}>
     <div className='w-full md:w-[16rem] lg:w-[20rem] xl:w-[20rem] h-[17rem] border-2 hover:border-sky-500/60 flex-none rounded-[25px] border-black/10 p-2 cursor-pointer'>
         <div className='w-full h-[70%] rounded-[23px] border border-black/10 overflow-hidden'>
-        <video  ref={videoRef} muted onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className='w-full h-full'>
+        <video  ref={videoRef} muted className='w-full h-full'>
             <source src={video.attributes.video_url} type="video/mp4"/>
         </video>
         </div>

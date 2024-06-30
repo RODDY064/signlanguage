@@ -1,211 +1,131 @@
+import { z } from 'zod';
 
-export interface ValidateType {
-    id: number;
-    email: string;
-    
-}
+// Define types using Zod for runtime type checking
+const ValidateTypeSchema = z.object({
+    id: z.number().positive(),
+    user_id: z.number().positive(), 
+    email: z.string().email(),
+    type: z.union([z.literal('correct'), z.literal('wrong')])
+  });
+
+const SignDataSchema = z.object({
+  users_voted: z.array(z.string()).optional(),
+  total_votes: z.number().nonnegative(),
+  correctness_votes: z.number().nonnegative().optional(),
+  wrongness_votes: z.number().nonnegative().optional(),
+});
+
+type ValidateType = z.infer<typeof ValidateTypeSchema>;
+type SignData = z.infer<typeof SignDataSchema>;
+
+
+
 
 
 // to return the data needed to update it 
 
-export async function updateData(url:string,fields:string){
-    try {
-        const response = await fetch(`${url}?${fields}`,{     
-            method:"GET",
-            headers:{
-                "content-type":"application/json"
-            }
-        })
-
-        const dataJson = await response.json();
-
+async function fetchData(endpoint: string, params: Record<string, string>): Promise<SignData> {
+      const url = new URL(`${process.env.API_BASE_URL}${endpoint}`);
+      Object.entries(params).forEach(([key, value]) => url.searchParams.append(key, value));
+    
+      try {
+        const response = await fetch(url.toString(), {
+          method: 'GET',
+          cache: 'no-cache',
+          headers: { 'Content-Type': 'application/json' },
+        });
+    
         if (!response.ok) {
-            throw new Error(dataJson.message || "Fail to fetch data")
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-
-        return dataJson.data.attributes
-    } catch (error) {
-        console.log(error)
-        throw new Error("Fail to fetch data")
+    
+        const data = await response.json();
+        // console.log('Data fetched:', data.data.attributes);
+        return SignDataSchema.parse(data.data.attributes);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        throw new Error('Failed to fetch data');
+      }
     }
 
-}
+async function updateEndpoint(endpoint: string, data: unknown): Promise<void> {
+  
+  // console.log('update data:', data);
 
-
-
-
-export async function validateVideo({ id, email }: ValidateType) {
   try {
-    // get the data from the database
-    const dbData = await updateData(`http://localhost:1337/api/signs/${id}`,`fields[0]=users_voted&fields[1]=correctness_votes&fields[2]=wrongness_votes&fields[3]=total_votes`);
-
-    console.log(dbData);
-
-    let data ;
-
-     if(dbData){
-        data = {
-            users_voted: [...dbData.users_voted, email],
-            total_votes: dbData.total_votes + 1,
-            correctness_votes: dbData.correctness_votes,
-            wrongness_votes: dbData.wrongness_votes,
-        
-        }
-     }else{
-        data = {
-           
-                users_voted: [email],
-                total_votes: dbData.total_votes + 1,
-                correctness_votes: dbData.correctness_votes + 1,
-                wrongness_votes: dbData.wrongness_votes + 1,
-            
-        }
-     }
-
-
-     // update the sign data
-
-    const res = await fetch(`http://localhost:1337/api/signs/${id}`, {
-      method: "PUT",
-      headers:{
-        "content-type":"application/json"
-    },
-    body: JSON.stringify({data}),
+    const response = await fetch(`${process.env.API_BASE_URL}${endpoint}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ data }),
     });
+     
+    const res = await response.json();
 
-     // do something if is not ok 
+    // console.log('update data response:', res);
 
-    if(!res.ok && res.status === 400){
-        console.log('user data fetch fail')
-       throw new Error("Fail to update data")
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-
-    const userData = await updateData(`http://localhost:1337/api/custom-users/${id}`,`fields[0]=total_votes&fields[1]=correctness&fields[2]=wrongness`);
-
-    const updateUserData = await fetch(`http://localhost:1337/api/custom-users/${id}`,{
-        method:"PUT",
-        headers:{
-            "content-type":"application/json"
-        },
-        body:JSON.stringify({
-            data:{
-            total_votes: userData.total_votes + 1,
-            correctness: userData.correctness_votes + 1,
-            wrongness: userData.wrongness_votes + 1
-            }
-        })
-    })
-         
-    return { message: "Data updated successfully" };
-
   } catch (error) {
-    console.log(error);
-    throw Error("Internal Server Error");
+    console.error('Error updating data:', error);
+    throw new Error('Failed to update data');
   }
 }
 
 
-// import { z } from 'zod';
+export async function validateVideo(input: ValidateType) {
+  
+  // console.log('validateVideo input:', input);
 
-// // Define types using Zod for runtime type checking
-// const ValidateTypeSchema = z.object({
-//   id: z.number().positive(),
-//   email: z.string().email(),
-// });
+  try {
 
-// const SignDataSchema = z.object({
-//   users_voted: z.array(z.string()),
-//   total_votes: z.number().nonnegative(),
-//   correctness_votes: z.number().nonnegative(),
-//   wrongness_votes: z.number().nonnegative(),
-// });
+    const { id, email , type , user_id } = ValidateTypeSchema.parse(input);
 
-// type ValidateType = z.infer<typeof ValidateTypeSchema>;
-// type SignData = z.infer<typeof SignDataSchema>;
+    // get the data from the database
 
-// const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:1337';
+    const signEndpoint = `/signs/${id}`;
+    const signParams = {
+      'fields[0]': 'users_voted',
+      'fields[1]': 'correctness_votes',
+      'fields[2]': 'wrongness_votes',
+      'fields[3]': 'total_votes',
+    };
+    
+    const dbData = await fetchData(signEndpoint, signParams);
 
-// async function fetchData(endpoint: string, params: Record<string, string>): Promise<SignData> {
-//   const url = new URL(`${API_BASE_URL}${endpoint}`);
-//   Object.entries(params).forEach(([key, value]) => url.searchParams.append(key, value));
+     // update the sign data
 
-//   try {
-//     const response = await fetch(url.toString(), {
-//       method: 'GET',
-//       headers: { 'Content-Type': 'application/json' },
-//     });
+    const updatedSignData: SignData = {
+      users_voted: [...new Set([...(dbData.users_voted || []), email])], // Ensure uniqueness
+      total_votes: dbData.total_votes + 1,
+      correctness_votes: type === 'correct' ? (dbData.correctness_votes ?? 0) + 1 : dbData.correctness_votes,
+      wrongness_votes: type === 'wrong' ? (dbData.wrongness_votes ?? 0) + 1 : dbData.wrongness_votes,
+    };
 
-//     if (!response.ok) {
-//       throw new Error(`HTTP error! status: ${response.status}`);
-//     }
+    await updateEndpoint(signEndpoint, updatedSignData);
+ 
+    // Fetch and update user data
+    const userEndpoint = `/custom-users/${user_id}`;
+    const userParams = {
+      'fields[0]': 'total_votes',
+      'fields[1]': 'correctness_votes',
+      'fields[2]': 'wrongness_votes',
+    };
+    const userData = await fetchData(userEndpoint, userParams);
+    const updatedUserData = {
+      total_votes: userData.total_votes + 1,
+      correctness_votes: type === 'correct' ? (dbData.correctness_votes ?? 0) + 1 : dbData.correctness_votes,
+      wrongness_votes: type === 'wrong' ? (dbData.wrongness_votes ?? 0) + 1 : dbData.wrongness_votes,
+    };
 
-//     const data = await response.json();
-//     return SignDataSchema.parse(data.data.attributes);
-//   } catch (error) {
-//     console.error('Error fetching data:', error);
-//     throw new Error('Failed to fetch data');
-//   }
-// }
+     await updateEndpoint(userEndpoint, updatedUserData);
+    //   // send the data to the server to get update the session
 
-// async function updateEndpoint(endpoint: string, data: unknown): Promise<void> {
-//   try {
-//     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-//       method: 'PUT',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify({ data }),
-//     });
 
-//     if (!response.ok) {
-//       throw new Error(`HTTP error! status: ${response.status}`);
-//     }
-//   } catch (error) {
-//     console.error('Error updating data:', error);
-//     throw new Error('Failed to update data');
-//   }
-// }
-
-// export async function validateVideo(input: ValidateType): Promise<{ message: string }> {
-//   try {
-//     // Validate input
-//     const { id, email } = ValidateTypeSchema.parse(input);
-
-//     // Fetch sign data
-//     const signEndpoint = `/api/signs/${id}`;
-//     const signParams = {
-//       'fields[0]': 'users_voted',
-//       'fields[1]': 'correctness_votes',
-//       'fields[2]': 'wrongness_votes',
-//       'fields[3]': 'total_votes',
-//     };
-//     const dbData = await fetchData(signEndpoint, signParams);
-
-//     // Update sign data
-//     const updatedSignData: SignData = {
-//       users_voted: [...new Set([...dbData.users_voted, email])], // Ensure uniqueness
-//       total_votes: dbData.total_votes + 1,
-//       correctness_votes: dbData.correctness_votes + 1,
-//       wrongness_votes: dbData.wrongness_votes,
-//     };
-//     await updateEndpoint(signEndpoint, updatedSignData);
-
-//     // Fetch and update user data
-//     const userEndpoint = `/api/custom-users/${id}`;
-//     const userParams = {
-//       'fields[0]': 'total_votes',
-//       'fields[1]': 'correctness_votes',
-//       'fields[2]': 'wrongness_votes',
-//     };
-//     const userData = await fetchData(userEndpoint, userParams);
-//     const updatedUserData = {
-//       total_votes: userData.total_votes + 1,
-//       correctness_votes: userData.correctness_votes + 1,
-//       wrongness_votes: userData.wrongness_votes,
-//     };
-//     await updateEndpoint(userEndpoint, updatedUserData);
-
-//     return { message: 'Data updated successfully' };
-//   } catch (error) {
-//     console.error('Error in validateVideo:', error);
-//     throw new Error('Internal Server Error');
-//   }
-// }
+    console.log('Data updated successfully');
+    return { message: 'Data updated successfully' };
+  } catch (error) {
+    console.error('Error in validateVideo:', error);
+    throw new Error('Internal Server Error');
+  }
+}

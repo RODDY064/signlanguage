@@ -2,7 +2,22 @@
 
 export async function getSignData(){
     try {
-        const response = await fetch('https://popular-birds-9e1d0b64bf.strapiapp.com/api/signs?pagination[pageSize]=267',{
+
+        const params = {
+            "fields[0]":"video_name",
+            "fields[1]":"video_url",
+            "fields[2]":"description"
+          
+        }
+        
+         // get the data that the user has not voted for
+        const filter = ''
+
+        const url = new URL(`${process.env.API_BASE_URL}/signs`);
+        Object.entries(params).forEach(([key, value]) => url.searchParams.append(key, value));
+       
+
+        const response = await fetch(url.toString(),{
             method:"GET",
              cache: 'no-cache',
             headers:{
