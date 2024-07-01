@@ -1,15 +1,17 @@
+"use server"
+
 import { z } from 'zod';
 
 // Define types using Zod for runtime type checking
 const ValidateTypeSchema = z.object({
     id: z.number().positive(),
-    user_id: z.number().positive(), 
+    user_id: z.string(), 
     email: z.string().email(),
     type: z.union([z.literal('correct'), z.literal('wrong')])
   });
 
 const SignDataSchema = z.object({
-  users_voted: z.array(z.string()).optional(),
+  users_voted: z.array(z.object({email: z.string().optional(),type: z.string().optional()})).optional(),
   total_votes: z.number().nonnegative(),
   correctness_votes: z.number().nonnegative().optional(),
   wrongness_votes: z.number().nonnegative().optional(),
@@ -95,8 +97,10 @@ export async function validateVideo(input: ValidateType) {
 
      // update the sign data
 
+    const userVoteData = { email : email , type : type }
+
     const updatedSignData: SignData = {
-      users_voted: [...new Set([...(dbData.users_voted || []), email])], // Ensure uniqueness
+      users_voted: [...(dbData.users_voted ?? []), userVoteData], // Ensure uniqueness
       total_votes: dbData.total_votes + 1,
       correctness_votes: type === 'correct' ? (dbData.correctness_votes ?? 0) + 1 : dbData.correctness_votes,
       wrongness_votes: type === 'wrong' ? (dbData.wrongness_votes ?? 0) + 1 : dbData.wrongness_votes,
@@ -123,7 +127,7 @@ export async function validateVideo(input: ValidateType) {
 
 
     console.log('Data updated successfully');
-    return { message: 'Data updated successfully' };
+    return { status: 200, message: 'Data updated successfully' };
   } catch (error) {
     console.error('Error in validateVideo:', error);
     throw new Error('Internal Server Error');
