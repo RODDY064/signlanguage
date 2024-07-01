@@ -12,6 +12,7 @@ export default function Edit() {
   const [uploadedFile, setUploadedFile] = useState<string | null>(null);
   const [error, setError] = useState<string>("");
   const { setEdit } = useEdit();
+  const [vote, setVote] = useState('')
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -76,7 +77,7 @@ export default function Edit() {
             <textarea
               {...register("description")}
               name="description"
-              className="w-full min-h-[230px] max-h-[230px] bg-transparent border focus:outline-none border-black/20 focus:border-blue-500/70 
+              className="w-full min-h-[200px] max-h-[200px] bg-transparent border focus:outline-none border-black/20 focus:border-blue-500/70 
                rounded-[8px] p-2 mt-2 mb-2"
             />
              {errors.description && <p className="text-red-500 text-sm font-light mb-2">{errors.description.message}</p>}
@@ -85,7 +86,7 @@ export default function Edit() {
                 htmlFor="dropzone-file"
                 className="flex flex-col items-center justify-center w-full h-[10rem] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-sky-100"
               >
-                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                <div className="flex flex-col items-center justify-center pt-5 pb-6 mb-5">
                   <svg
                     className="w-8 h-8 mb-4 text-gray-400 "
                     aria-hidden="true"
@@ -126,6 +127,19 @@ export default function Edit() {
                 </div>
               )}
             </div>
+            <div className="w-full my-5">
+  <label className="text-[15px] font-medium">Please select a value to vote</label>
+  <div className="flex my-2 gap-6 justify-center items-center w-full">
+    <li className="flex gap-2 items-center">
+      <input type="radio" name="vote"required  className="styled-checkbox" id="correct" />
+      <label htmlFor="correct" className="text-green-600">Correct</label>
+    </li>
+    <li className="flex gap-2 items-center">
+      <input type="radio" name="vote" required  className="styled2-checkbox" id="wrong" />
+      <label htmlFor="wrong" className="text-red-600">Wrong</label>
+    </li>
+  </div>
+</div>
             <div className="w-full flex justify-end my-4">
               <input type="submit" name="submit" className="w-full text-white h-12 bg-blue-500 hover:bg-sky-200 hover:text-blue-700 cursor-pointer rounded-[8px]"/>
             </div>

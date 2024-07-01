@@ -15,8 +15,11 @@ const config: Config = {
       },
       boxShadow:{
         "custom":"rgba(0, 0, 0, 0.10) 0px 5px 15px 0px"
+      },
+      content: {
+        'link': 'url("/icons/tick.svg")',
+        'link2': 'url("/icons/tick2.svg")',
       }
-
     },
   },
   plugins: [],

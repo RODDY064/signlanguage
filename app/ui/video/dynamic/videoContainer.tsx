@@ -18,7 +18,7 @@ export default function VideoContainer({videoData}:{videoData:any}) {
       <div className='my-4 md:px-2'>
          <div className="flex gap-2 justify-between">
            <div>
-           <h1 className="text-3xl font-bold px-4 "><span className="text-2xl text-black/50 font-medium">Description : </span> {videoData.attributes.video_name}</h1>
+           <h1 className="text-2xl font-bold px-4 "><span className="text-xl text-black/50 font-medium">Description : </span> {videoData.attributes.video_name}</h1>
            </div>
            <div onClick={()=>setEdit(true)} className="px-8 hidden  md:px-10 h-12 cursor-pointer md:flex items-center gap-2 justify-center group/m hover:bg-sky-300 hover:text-blue-700 bg-sky-600 text-white rounded-[25px]">
             <p>Edit</p>
@@ -34,7 +34,7 @@ export default function VideoContainer({videoData}:{videoData:any}) {
             <Image src="/icons/edit_b.svg" width={20} height={20} alt="edit" className="hidden group-hover/m:flex"/>
            </div>
         </div>
-        <Vote/>
+        <Vote id={videoData.id}/>
     </div>
   )
 }

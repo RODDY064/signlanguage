@@ -19,3 +19,14 @@ body {
     text-wrap: balance;
   }
 }
+
+.styled-checkbox {
+  @apply appearance-none;
+  @apply w-5 h-5 flex items-center justify-center rounded-full border-2 border-black/40  bg-transparent  focus:outline-none checked:border-green-300 relative transition duration-150 ease-in-out  cursor-pointer checked:before:content-link checked:before:w-5 checked:before:h-1   checked:before:absolute checked:before:top-[-8.8px]
+  checked:before:rounded-full checked:before:flex;
+}
+.styled2-checkbox {
+  @apply appearance-none;
+  @apply w-5 h-5 flex items-center justify-center rounded-full border-2 border-black/40  bg-transparent  focus:outline-none checked:border-red-300 relative transition duration-150 ease-in-out  cursor-pointer checked:before:content-link2 checked:before:w-5 checked:before:h-1   checked:before:absolute checked:before:top-[-8.8px]
+  checked:before:rounded-full checked:before:flex;
+}

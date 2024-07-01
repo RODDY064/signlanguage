@@ -200,12 +200,13 @@ export default function Form() {
                             (errors.userData.username as { message: string })
                               .message
                           }{" "}
-                          &{" "}
+                           {}
+                          {errors.userData && "username" in errors.userData && errors.userData && "password" in errors.userData && <>&</> }
                         </p>
                       )}
                       {errors.userData && "password" in errors.userData && (
                         <p>
-                          {
+                         {
                             (errors.userData.password as { message: string })
                               .message
                           }
