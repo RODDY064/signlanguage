@@ -21,9 +21,9 @@ export default function Container({videoData}:{videoData:any}) {
     }
   }, [query, videoData]);
 
-  useEffect(()=>{
-    console.log(filteredDataRef.current) // use the reference here
-  },[filteredDataRef.current]) 
+  // useEffect(()=>{
+  //   console.log(filteredDataRef.current) // use the reference here
+  // },[filteredDataRef.current]) 
 
 
    

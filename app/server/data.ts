@@ -140,7 +140,7 @@ export async function getSignDataById(id:number){
           
         }
 
-        const url = new URL(`${process.env.API_BASE_URL}/signs/${id}`);
+        const url = new URL(`${process.env.API_BASE_URL}/signs/${id}?populate=*`); 
         Object.entries(params).forEach(([key, value]) => url.searchParams.append(key, value));
 
         const response = await fetch(url.toString(),{
@@ -151,7 +151,6 @@ export async function getSignDataById(id:number){
         })
 
         const dataJson = await response.json();
-        // console.log(dataJson.data)
         return dataJson.data
 
 

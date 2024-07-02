@@ -24,15 +24,17 @@ export const UserSchema = z.object({
 
 export const updateDataSchema = z.object({
   description: z.string().min(1, 'Description cannot be empty'),
-  video: z
-    .instanceof(File)
+  vote: z.enum(['correct', 'wrong']),
+  video: z.instanceof(File)
     .optional()
-    .refine(file => !file || ['video/mp4', 'video/webm', 'video/ogg'].includes(file.type), {
-      message: 'Invalid file type. Please upload a video file (MP4, WebM, Ogg).',
-    })
-    .refine(file => !file || file.size <= 20 * 1024 * 1024, {
-      message: 'File size exceeds 20 MB. Please upload a smaller video.',
-    }),
+    .refine(
+      file => !file || file.size <= 20 * 1024 * 1024,
+      {message: 'File size exceeds 20 MB. Please upload a smaller video.',})
+    .refine(
+      file => !file || ['video/mp4', 'video/webm', 'video/ogg'].includes(file.type),{
+        message: 'Invalid file type. Please upload a video file (MP4, WebM, Ogg).',
+      }
+    ),
 });
 
 export type UpdateDataSchemaType = z.infer<typeof updateDataSchema>;
