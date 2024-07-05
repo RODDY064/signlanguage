@@ -11,10 +11,10 @@ const ValidateTypeSchema = z.object({
   });
 
 const SignDataSchema = z.object({
-  users_voted: z.array(z.object({email: z.string().optional(),type: z.string().optional()})).optional(),
-  total_votes: z.number().nonnegative(),
-  correctness_votes: z.number().nonnegative().optional(),
-  wrongness_votes: z.number().nonnegative().optional(),
+  users_voted: z.array(z.object({email: z.string().optional(),type: z.string().optional()})).optional().nullable(),
+  total_votes: z.number().nonnegative().optional().nullable(),
+  correctness_votes: z.number().nonnegative().optional().nullable(),
+  wrongness_votes: z.number().nonnegative().optional().nullable(),
 });
 
 type ValidateType = z.infer<typeof ValidateTypeSchema>;
@@ -37,10 +37,10 @@ async function fetchData(endpoint: string, params: Record<string, string>): Prom
           headers: { 'Content-Type': 'application/json' },
         });
     
-        if (!response.ok) {
+        if (!response.ok && response.status !== 200) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-    
+        // console.log('Data fetched:', response);
         const data = await response.json();
         // console.log('Data fetched:', data.data.attributes);
         return SignDataSchema.parse(data.data.attributes);
@@ -60,14 +60,18 @@ async function updateEndpoint(endpoint: string, data: unknown): Promise<void> {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ data }),
     });
+
+
+    if (!response.ok &&  response.status !== 200) {
+      throw new Error(`HTTP error! status: ${response.status} , number 2`);
+    }
+
+    // console.log(response)
      
     const res = await response.json();
 
     // console.log('update data response:', res);
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
   } catch (error) {
     console.error('Error updating data:', error);
     throw new Error('Failed to update data');
@@ -100,27 +104,33 @@ export async function validateVideo(input: ValidateType) {
     const userVoteData = { email : email , type : type }
 
     const updatedSignData: SignData = {
-      users_voted: [...(dbData.users_voted ?? []), userVoteData], // Ensure uniqueness
-      total_votes: dbData.total_votes + 1,
+      users_voted: [...(dbData?.users_voted ?? []), userVoteData], // Ensure uniqueness
+      total_votes: (dbData.total_votes?? 0) + 1,
       correctness_votes: type === 'correct' ? (dbData.correctness_votes ?? 0) + 1 : dbData.correctness_votes,
       wrongness_votes: type === 'wrong' ? (dbData.wrongness_votes ?? 0) + 1 : dbData.wrongness_votes,
     };
 
     await updateEndpoint(signEndpoint, updatedSignData);
- 
+
     // Fetch and update user data
     const userEndpoint = `/custom-users/${user_id}`;
     const userParams = {
       'fields[0]': 'total_votes',
       'fields[1]': 'correctness_votes',
-      'fields[2]': 'wrongness_votes',
+      'fields[2]': 'wrongness_votes'
     };
-    const userData = await fetchData(userEndpoint, userParams);
+    const userData = await fetchData(userEndpoint, userParams)
+
+    // console.log(userData)
+    
+
     const updatedUserData = {
-      total_votes: userData.total_votes + 1,
+      total_votes: (userData?.total_votes?? 0)  + 1,
       correctness_votes: type === 'correct' ? (dbData.correctness_votes ?? 0) + 1 : dbData.correctness_votes,
       wrongness_votes: type === 'wrong' ? (dbData.wrongness_votes ?? 0) + 1 : dbData.wrongness_votes,
     };
+
+    //  console.log(updatedUserData)
 
      await updateEndpoint(userEndpoint, updatedUserData);
     //   // send the data to the server to get update the session

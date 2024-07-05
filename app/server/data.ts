@@ -27,7 +27,11 @@ interface User {
     if (!userEmail) return dataJson.data; // Return all videos if no email is provided
   
     return dataJson.data.filter(video => {
+      // Include videos where users_voted is null
+      if (video.attributes.users_voted === null) return true;
+  
       const userHasVoted = video.attributes.users_voted.some(user => user.email === userEmail);
+      // For "contain", return true if userHasVoted is true, for "not contain", return true if userHasVoted is false
       return typeReturn === "contain" ? userHasVoted : !userHasVoted;
     });
   }
@@ -59,10 +63,9 @@ export async function getSignData({email ,typeReturn }:{ email?:string, typeRetu
             }
         })
    
-    
 
         const dataJson = await response.json();
-
+  
 
          if(!email){
            throw new Error('Fail to fetch data')
