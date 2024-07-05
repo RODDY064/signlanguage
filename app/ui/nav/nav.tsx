@@ -22,13 +22,14 @@ export default function Nav() {
 
   return (
    <>
-    <div className='w-full md:w-auto px-2 py-4  z-20 md:p-4 flex justify-between md:justify-end absolute md:right-2  '>
+    <div className='w-full md:w-auto px-2 py-4  z-20 md:p-4 flex justify-between md:justify-end absolute md:right-2  max-w-screen-2xl 2xl:mx-auto'>
       <h1 className='md:hidden p-2'>
-        <Image src="/icons/logo.svg" width={130} height={130} alt="logo"/>
+        <Image id="mobileLogo" src="/icons/logo.svg" width={130} height={130} alt="logo"/>
       </h1>
       {isMobile && 
       <div className='cursor-pointer md:hidden'>
       <Image
+       id="menu"
        onClick={()=>setIsOpen(true)}
       src="/icons/menu.svg" width={35} height={35} alt="menu"/>
        </div>}

@@ -23,9 +23,9 @@ export default function Form() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  useEffect(() => {
-    console.log(Error);
-  }, [Error]);
+  // useEffect(() => {
+  //   console.log(Error);
+  // }, [Error]);
 
   // UseForm with the dynamic schema
   const {
@@ -33,7 +33,6 @@ export default function Form() {
     handleSubmit,
     reset,
     formState: { errors },
-    getValues,
   } = useForm<UserType>({
     defaultValues: { type: formType },
     resolver: zodResolver(UserSchema),
@@ -52,7 +51,10 @@ export default function Form() {
       try {
         const result = await loginUser(
           data.userData as { username: string; password: string }
-        );
+        )  ?? { status: 'status', message: 'Unknown error occurred' };;
+    
+        console.log(result.status)
+         
         if (result.status === "error") {
           console.log(result.error);
           setError(result.error);
@@ -100,7 +102,7 @@ export default function Form() {
 
   return (
     <div className="w-full md:w-auto flex flex-col items-center">
-      <h1 className="text-2xl md:text-3xl font-[500]">
+      <h1 className="text-2xl md:text-3xl font-[500] title">
         {formType === "signIn" ? `Welcome Back` : `Create an Account`}
       </h1>
       <p className="text-sm text-black/60 my-2 font-medium">
@@ -108,6 +110,7 @@ export default function Form() {
       </p>
       <div className="w-[80%] md:w-[26rem] h-12 bg-gray-100 rounded-[8px] p-1 flex gap-2">
         <div
+          id="signin"
           onClick={() => setFormType("signIn")}
           className={cn(
             "w-[50%] h-full rounded-[6px] flex items-center justify-center cursor-pointer",
@@ -117,6 +120,7 @@ export default function Form() {
           <p className="text-md font-[500]">Sign In</p>
         </div>
         <div
+          id="signup"
           onClick={() => setFormType("signUp")}
           className={cn(
             "w-[50%] h-full rounded-[6px] flex items-center justify-center cursor-pointer",
@@ -143,6 +147,7 @@ export default function Form() {
                     <div className="w-[2.5px] h-[60%] bg-gray-100 rounded-lg"></div>
                   </div>
                   <input
+                    id="username"
                     {...register("userData.username")}
                     name="userData.username"
                     type="email"
@@ -164,6 +169,7 @@ export default function Form() {
                     <div className="w-[2.5px] h-[60%] bg-gray-100 rounded-lg"></div>
                   </div>
                   <input
+                    id="password"
                     {...register("userData.password")}
                     name="userData.password"
                     type={!showPassword.signIn ? "password" : "text"}
@@ -171,6 +177,7 @@ export default function Form() {
                     className="w-[80%] bg-transparent focus:outline-none py-4 h-full"
                   />
                   <div
+                    id="changeType"
                     onClick={() => handlePasswordVisibility("signIn")}
                     className="px-2 h-full flex items-center justify-end cursor-pointer"
                   >
@@ -225,6 +232,7 @@ export default function Form() {
                   <div className="w-full">
                     <label className="w-full px-1">First Name</label>
                     <input
+                       id="firstname"
                       {...register("userData.firstname")}
                       name="userData.firstname"
                       className="w-full p-2 h-12 flex bg-white border-2 border-gray-100 rounded-[10px] focus:outline-none focus-within:border-blue-500/70"
@@ -233,6 +241,7 @@ export default function Form() {
                   <div className="w-full">
                     <label className="w-full px-1">Last Name</label>
                     <input
+                      id="lastname"
                       {...register("userData.lastname")}
                       name="userData.lastname"
                       className="w-full h-12 flex focus-within:border-blue-500/70 focus:outline-none p-2 bg-white border-2 border-gray-100 rounded-[10px]"
@@ -251,6 +260,7 @@ export default function Form() {
                     <div className="w-[2.5px] h-[60%] bg-gray-100 rounded-lg"></div>
                   </div>
                   <input
+                    id="email"
                     {...register("userData.email")}
                     name="userData.email"
                     type="email"
@@ -272,6 +282,7 @@ export default function Form() {
                     <div className="w-[2.5px] h-[60%] bg-gray-100 rounded-lg"></div>
                   </div>
                   <input
+                    id="user_password"
                     {...register("userData.user_password")}
                     name="userData.user_password"
                     type={!showPassword.signUp ? "password" : "text"}
@@ -364,6 +375,7 @@ export default function Form() {
               </div>
               <div className="w-full md:w-[26rem] my-4  flex gap-2 justify-center">
                 <input
+                   id="checkbox"
                   required
                   type="checkbox"
                   className="size-4 rounded-lg checked:bg-blue-700"

@@ -43,7 +43,7 @@ export default function Menu() {
       </div>
       <div className="flex flex-col gap-2">
         {menuItems.map((item,index)=>(
-          <Link href={item.link} key={index} className={cn("w-full h-14 group/x rounded-[10px] hover:bg-sky-100 bg-gray-100  flex items-center cursor-pointer px-4 gap-2 transition-all duration-10",{
+          <Link id={item.name.toLowerCase()} href={item.link} key={index} className={cn("w-full h-14 group/x rounded-[10px] hover:bg-sky-100 bg-gray-100  flex items-center cursor-pointer px-4 gap-2 transition-all duration-10",{
             "bg-sky-100": pathName === item.link
           })}>
           <div>

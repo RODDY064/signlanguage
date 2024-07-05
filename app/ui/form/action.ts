@@ -22,7 +22,8 @@ export async function loginUser(data: z.infer<typeof SignInSchema>) {
           redirectTo:"/dashboard"
       });
 
-      return { status: "success" , message: "Login successful"};
+      return { status: "error" , message: "Login successful"};
+      
   } catch (error) {
       if (error instanceof AuthError) {
           switch (error.type) {
