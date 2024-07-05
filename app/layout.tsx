@@ -3,6 +3,8 @@ import { Inter, Poppins } from "next/font/google";
 import "../styles/globals.css";
 import Menu from "./ui/menu/menu";
 import { SessionProvider } from "next-auth/react";
+import MobileNav from "./ui/nav/mobileNav";
+import MobileContextProvider from "./ui/nav/mobileContext";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -21,9 +23,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.className}`}>
+        <MobileContextProvider>
         <SessionProvider>
+          <MobileNav/>
          {children}
         </SessionProvider>
+        </MobileContextProvider>
       </body>
     </html>
   );

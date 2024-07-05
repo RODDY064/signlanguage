@@ -166,8 +166,8 @@ export default function Edit() {
                 </div>
               )}
             </div>
-            <div className="w-full my-5">
-              <label className="text-[15px] font-medium">
+            <div className="w-full max-sm:text-center my-5">
+              <label className="text-[15px]  font-medium">
                 Please select a value to vote
               </label>
               <div className="flex my-2 gap-6 justify-center items-center w-full">

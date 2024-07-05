@@ -21,6 +21,7 @@ export default function Form() {
   const [formType, setFormType] = useState<"signIn" | "signUp">("signIn");
   const [Error, setError] = useState<string | null>();
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     console.log(Error);
@@ -52,7 +53,7 @@ export default function Form() {
         const result = await loginUser(
           data.userData as { username: string; password: string }
         );
-        if (result.error) {
+        if (result.status === "error") {
           console.log(result.error);
           setError(result.error);
         } else {

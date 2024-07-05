@@ -1,4 +1,4 @@
-import type { NextAuthConfig } from "next-auth";
+import { AuthError, type NextAuthConfig } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -35,9 +35,9 @@ export default {
           }
         })
   
-    
+
         if (!user) {
-          throw new Error('User not found.')
+          throw new AuthError("Invalid username or password", { type:"CredentialsSignin" });
         }
        // return user object with their profile data
         return user;
@@ -88,3 +88,15 @@ export default {
     }
   }
 } as NextAuthConfig; // Add type assertion
+
+
+class CustomError extends Error {
+  type: string;
+
+  constructor(message: string, type: string) {
+    super(message); // Pass message to the Error constructor
+    this.type = type; // Custom property
+    this.name = this.constructor.name; // Set the error name to the class name
+    Object.setPrototypeOf(this, CustomError.prototype); // Restore prototype chain
+  }
+}

@@ -15,7 +15,7 @@ export default async function History() {
     <div className='w-full h-screen overflow-hidden    md:pl-[13rem] lg:pl-[17rem] md:pr-6 pt-24 md:pt-8 items-center  flex flex-col '>
       <div className='w-[95%] h-full'>
       <h1 className='text-2xl font-bold'>History</h1>
-      <div className='w-full h-full overflow-y-scroll pb-20 border-t border-black/40 pt-6 mt-4 flex flex-wrap flex-col items-center md:flex-row md:items-start gap-4'>
+      <div className='w-full h-full overflow-y-scroll pb-20 border-t border-black/40 pt-6 mt-4 flex md:flex-wrap flex-col items-center md:flex-row md:items-start gap-4'>
        {data.map((item)=>(
           <HistoryCard key={item.id} data={item} email={email}/>
        ))}

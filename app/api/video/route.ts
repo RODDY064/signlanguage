@@ -60,7 +60,7 @@ export async function POST(request: Request) {
 
         const res = await update.json()  
 
-        console.log(res)
+        // console.log(res)
 
        if(!update.ok){
         return NextResponse.json({ error: 'Fail to update data' },{ status:400});
