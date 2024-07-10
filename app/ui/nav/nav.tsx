@@ -1,21 +1,38 @@
 "use client"
 
 import Image from 'next/image'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import Account from './account'
+import { useMobile } from './mobileContext'
 
 
 export default function Nav() {
 
   const [accountTabIsActive, setAccountTabIsActive] = useState(false)
+   
+  const { setIsOpen, isOpen} = useMobile()
+  const [isMobile , setIsMobile] = useState<boolean>(false)
+
+   useEffect(()=>{
+    if(window.innerHeight > 768){
+      setIsMobile(true)
+    }
+   },[])
 
 
   return (
-    <div className='w-full md:w-auto px-2 py-4  z-20 md:p-4 flex justify-between md:justify-end absolute md:right-2  '>
-      <h1 className='md:hidden'>logo</h1>
+   <>
+    <div className='w-full md:w-auto px-2 py-4  z-20 md:p-4 flex justify-between md:justify-end absolute md:right-2  max-w-screen-2xl 2xl:mx-auto'>
+      <h1 className='md:hidden p-2'>
+        <Image id="mobileLogo" src="/icons/logo.svg" width={130} height={130} alt="logo"/>
+      </h1>
+      {isMobile && 
       <div className='cursor-pointer md:hidden'>
-        <Image src="/icons/menu.svg" width={35} height={35} alt="menu"/>
-      </div>
+      <Image
+       id="menu"
+       onClick={()=>setIsOpen(true)}
+      src="/icons/menu.svg" width={35} height={35} alt="menu"/>
+       </div>}
       <div className='hidden md:flex gap-6 items-center'>
         <div className='relative'>
         <div onClick={()=>setAccountTabIsActive(!accountTabIsActive)} className='size-10 rounded-full border border-black/20 flex items-center justify-center cursor-pointer'>
@@ -28,5 +45,6 @@ export default function Nav() {
         </div>
       </div>
     </div>
+   </>
   )
 }

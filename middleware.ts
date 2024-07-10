@@ -8,11 +8,10 @@ export default auth((req)=>{
     const { nextUrl } = req;
     const isLoggedIn = !!req.auth?.user;
 
-    // console.log('love')
-
+    // console.log(isLoggedIn)
 
     const homeRoute = "/";
-    const apiRoutes = ['/dashboard', '/video'];
+    const apiRoutes = ['/dashboard', '/video','/history','/api/ses'];
     const isAuthRoutes = apiRoutes.some(route => nextUrl.pathname.startsWith(route));
     
     if (isAuthRoutes && !isLoggedIn) {

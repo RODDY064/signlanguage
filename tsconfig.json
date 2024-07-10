@@ -10,6 +10,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "downlevelIteration": true,
     "jsx": "preserve",
     "incremental": true,
     "plugins": [
@@ -23,4 +24,5 @@
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "public/icons/search.tsvg"],
   "exclude": ["node_modules"]
+
 }

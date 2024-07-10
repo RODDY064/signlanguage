@@ -5,7 +5,7 @@ import Nav from "@/app/ui/nav/nav"
 
 export default function DashboardLayout({children}:{children:React.ReactNode}) {
   return (
-    <div className="flex flex-col ">
+    <div className="flex flex-col max-w-screen-2xl 2xl:mx-auto ">
      <EditContextProvider>
      <Menu/>
      <Nav/>
