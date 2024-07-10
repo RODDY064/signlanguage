@@ -20,15 +20,15 @@ export default function VideoContainer({videoData}:{videoData:any}) {
            <div>
            <h1 className="text-2xl font-bold px-4 "><span className="text-xl text-black/50 font-medium">Description : </span> {videoData.attributes.video_name}</h1>
            </div>
-           <div onClick={()=>setEdit(true)} className="px-8 hidden  md:px-10 h-12 cursor-pointer md:flex items-center gap-2 justify-center group/m hover:bg-sky-300 hover:text-blue-700 bg-sky-600 text-white rounded-[25px]">
+           <div id="edit" onClick={()=>setEdit(true)} className="px-8 hidden  md:px-10 h-12 cursor-pointer md:flex items-center gap-2 justify-center group/m hover:bg-sky-300 hover:text-blue-700 bg-sky-600 text-white rounded-[25px]">
             <p>Edit</p>
             <Image src="/icons/edit.svg" width={20} height={20} alt="edit" className="group-hover/m:hidden"/>
             <Image src="/icons/edit_b.svg" width={20} height={20} alt="edit" className="hidden group-hover/m:flex"/>
            </div>
          </div>
         </div>
-        <div className="w-full flex justify-end md:hidden my-4">
-        <div onClick={()=>setEdit(true)} className="px-8 flex   md:px-10 h-12 cursor-pointer md:hidden items-center gap-2 justify-center group/m hover:bg-sky-300 hover:text-blue-700 bg-sky-600 text-white rounded-[25px]">
+        <div  className="w-full flex justify-end md:hidden my-4">
+        <div id="edit" onClick={()=>setEdit(true)} className="px-8 flex   md:px-10 h-12 cursor-pointer md:hidden items-center gap-2 justify-center group/m hover:bg-sky-300 hover:text-blue-700 bg-sky-600 text-white rounded-[25px]">
             <p>Edit</p>
             <Image src="/icons/edit.svg" width={20} height={20} alt="edit" className="group-hover/m:hidden"/>
             <Image src="/icons/edit_b.svg" width={20} height={20} alt="edit" className="hidden group-hover/m:flex"/>

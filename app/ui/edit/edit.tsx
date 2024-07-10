@@ -79,6 +79,8 @@ export default function Edit() {
       if (response.ok) {
         console.log('Form submitted successfully.');
         setEdit(false);
+        // get the video id in the local storage and update the vote
+        localStorage.setItem(`video_${id}`, data.vote)      
         router.push('/dashboard')
         
       } else {
@@ -95,9 +97,9 @@ export default function Edit() {
   return (
     <div className="w-full h-full top-0 bottom-0 fixed z-[90] bg-black/30 flex items-center justify-center">
       <div className="w-[90%] min-h-[70%] md:w-[70%] xl:w-[40%] md:min-h-[40rem] 2xl:h-[45rem]  bg-white rounded-[12px] md:rounded-[15px] py-4 p-6">
-        <div className="w-full flex items-center justify-between">
+        <div  className="w-full flex items-center justify-between">
           <h1 className="text-xl text-blue-500">Edit</h1>
-          <div onClick={() => setEdit(false)} className="">
+          <div id="edit_close" onClick={() => setEdit(false)} className="">
             <Image
               src="/icons/x.svg"
               width={24}
@@ -112,6 +114,7 @@ export default function Edit() {
           <form onSubmit={handleSubmit(onSubmit)}>
             <label className="text-[15px] font-medium">Description</label>
             <textarea
+              id="description"
               {...register("description")}
               name="description"
               className="w-full min-h-[200px] max-h-[200px] bg-transparent border focus:outline-none border-black/20 focus:border-blue-500/70 
@@ -152,6 +155,7 @@ export default function Edit() {
                   </p>
                 </div>
                 <input
+                 disabled={true}
                   name="video"
                   id="dropzone-file"
                   type="file"
@@ -173,6 +177,7 @@ export default function Edit() {
               <div className="flex my-2 gap-6 justify-center items-center w-full">
                 <li className="flex gap-2 items-center">
                   <input
+  
                     value="correct"
                     {...register("vote", { required: true })}
                     type="radio"

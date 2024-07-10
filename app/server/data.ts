@@ -148,12 +148,16 @@ export async function getSignDataById(id:number){
 
         const response = await fetch(url.toString(),{
             method:"GET",
+            cache:"no-cache",          
             headers:{
                 "content-type":"application/json"
             }
         })
 
+       
+
         const dataJson = await response.json();
+        // console.log(dataJson.data)
         return dataJson.data
 
 

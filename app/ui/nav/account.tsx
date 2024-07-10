@@ -6,10 +6,12 @@ import { useSession } from "next-auth/react";
 
 export default function Account() {
  
-    const { data: session } = useSession()
+    const { data: session , update } = useSession()
 
   return (
-    <div className='right-4 w-[26rem] h-[12rem]  rounded-[15px] bg-white shadow-custom border border-gray-200 absolute p-4'>
+    <div 
+     onClick={()=>update()}
+    className='right-4 w-[26rem] h-[12rem]  rounded-[15px] bg-white shadow-custom border border-gray-200 absolute p-4 z-[70]'>
         <h1 className="text-xl font-medium">Account</h1>
        <div className="mt-2 text-black/60">
        <p className="">Username : {session?.user?.email}</p>

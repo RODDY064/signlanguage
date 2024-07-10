@@ -18,6 +18,7 @@ export default function Vote({id }:{id:number}) {
   }, [id])
 
   const handleVote = async (vote: "correct" | "wrong") => {
+    
     if (session?.user) {
       const input = {
         id: id,
@@ -33,6 +34,9 @@ export default function Vote({id }:{id:number}) {
         setIsVoted(true)
         localStorage.setItem(`vote_${id}`, vote)
       }
+      console.log('love')
+    }else{
+      update()
     }
   }
 
@@ -41,16 +45,18 @@ export default function Vote({id }:{id:number}) {
         <p className="font-medium">{!isVoted ? 'Please vote' : 'Voted :' }</p>
        {isVoted ? 
          (<>
-          {voted === 'correct'  && <p className="text-xl font-medium text-green-600">Correct</p>}
-          {voted === 'wrong'  && <p className="text-xl font-medium text-red-600">Wrong</p>}
+          {voted === 'correct'  && <p id="voted_correct" className="text-xl font-medium text-green-600">Correct</p>}
+          {voted === 'wrong'  && <p id="voted_wrong" className="text-xl font-medium text-red-600">Wrong</p>}
           </>):
          (<div className="flex gap-4 items-center">
           <div 
+            id="vote_correct"
            onClick={()=>handleVote('correct')}
           className="w-32 px-6 h-10 bg-green-100/70 rounded-[6px] cursor-pointer flex items-center justify-center">
               <p className="text-green-500">Correct</p>
           </div>
           <div 
+           id="vote_wrong"
           onClick={()=>handleVote('wrong')}
           className="w-32 px-6 h-10 bg-red-100/70 rounded-[6px] cursor-pointer flex items-center justify-center">
               <p className="text-red-500">Wrong</p>
