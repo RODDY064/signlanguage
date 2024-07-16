@@ -8,7 +8,7 @@ import { auth } from "@/auth"
 import { Suspense } from "react"
 
 
-const SearchFallBack = ()=>{
+ export const SearchFallBack = ()=>{
   return (
     <div>Loading...</div>
   )
