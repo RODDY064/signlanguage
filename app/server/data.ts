@@ -54,12 +54,14 @@ export async function getSignData({email ,typeReturn }:{ email?:string, typeRetu
         const url = new URL(`${process.env.API_BASE_URL}/signs`);
         Object.entries(params).forEach(([key, value]) => url.searchParams.append(key, value));
        
+        const apiToken = process.env.API_TOKEN;
 
         const response = await fetch(url.toString(),{
             method:"GET",
              cache: 'no-cache',
             headers:{
-                "content-type":"application/json"
+                "content-type":"application/json",
+                "Authorization": `Bearer ${apiToken}` 
             }
         })
    
@@ -72,6 +74,8 @@ export async function getSignData({email ,typeReturn }:{ email?:string, typeRetu
          }
 
         // filter data 
+        // console.log(dataJson)
+
 
         const result = getVideosNotVotedByUser(dataJson, typeReturn , email);
         // console.log(result , typeReturn);
@@ -108,12 +112,14 @@ export async function getSimilarData({noOfItems, currentItemID , email, typeRetu
         const url = new URL(`${process.env.API_BASE_URL}/signs`);
         Object.entries(params).forEach(([key, value]) => url.searchParams.append(key, value));
 
+        const apiToken = process.env.API_TOKEN;
 
         const response = await fetch(url.toString(),{     
             method:"GET",
             cache:"no-cache",
             headers:{
-                "content-type":"application/json"
+                "content-type":"application/json",
+                "Authorization": `Bearer ${apiToken}` 
             }
         })
 
@@ -146,11 +152,13 @@ export async function getSignDataById(id:number){
         const url = new URL(`${process.env.API_BASE_URL}/signs/${id}?populate=*`); 
         Object.entries(params).forEach(([key, value]) => url.searchParams.append(key, value));
 
+        const apiToken = process.env.API_TOKEN;
         const response = await fetch(url.toString(),{
             method:"GET",
             cache:"no-cache",          
             headers:{
-                "content-type":"application/json"
+                "content-type":"application/json",
+                "Authorization": `Bearer ${apiToken}` 
             }
         })
 

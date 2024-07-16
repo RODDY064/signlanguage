@@ -18,11 +18,14 @@ export default {
       authorize: async (credentials: Partial<Record<"username" | "password", unknown>>) => {
         let user = null
         // Find user by username and password 
+
+        const apiToken = process.env.API_TOKEN;
          
         user = await fetch(`${process.env.API_BASE_URL}/custom-user/login`,{
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${apiToken}` 
           },
           body: JSON.stringify(credentials)
         }).then(async (res) => {

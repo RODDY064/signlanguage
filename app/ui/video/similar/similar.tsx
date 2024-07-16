@@ -39,7 +39,7 @@ const SimilarCard = ( { Data}:{ Data:any}) => {
        <h3 className='text-lg font-medium text-white'>{item.attributes.video_name}</h3>
        </div>
        <video className='w-full h-full object-cover' >
-          <source src={item.attributes.video_url} type="video/mp4"/>
+          <source src={`https://strap-val.onrender.com${item.attributes.video_url}`} type="video/mp4"/>
         </video>
       </div>
      </Link>
