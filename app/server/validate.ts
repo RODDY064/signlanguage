@@ -53,11 +53,15 @@ async function fetchData(endpoint: string, params: Record<string, string>): Prom
 async function updateEndpoint(endpoint: string, data: unknown): Promise<void> {
   
   // console.log('update data:', data);
+   const apiToken = process.env.API_TOKEN;
 
   try {
     const response = await fetch(`${process.env.API_BASE_URL}${endpoint}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${apiToken}` 
+      },
       body: JSON.stringify({ data }),
     });
 

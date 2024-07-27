@@ -8,6 +8,7 @@ export default async function History() {
   const email = session?.user.email
 
    const data = await getSignData({ email , typeReturn : 'contain'})
+ 
    
 
 

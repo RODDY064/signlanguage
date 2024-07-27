@@ -24,30 +24,37 @@ interface User {
     typeReturn: "not contain" | "contain", 
     userEmail?: string 
   ): Video[] {
-    if (!userEmail) return dataJson.data; // Return all videos if no email is provided
+    // Return all videos if no email is provided
+    if (!userEmail) return dataJson.data;
   
     return dataJson.data.filter(video => {
       // Include videos where users_voted is null
-      if (video.attributes.users_voted === null) return true;
+      if (video.attributes.users_voted === null) return typeReturn === "not contain";
   
       const userHasVoted = video.attributes.users_voted.some(user => user.email === userEmail);
-      // For "contain", return true if userHasVoted is true, for "not contain", return true if userHasVoted is false
+      // For "contain", return true if userHasVoted is true
+      // For "not contain", return true if userHasVoted is false
       return typeReturn === "contain" ? userHasVoted : !userHasVoted;
     });
   }
-  
   
 
 export async function getSignData({email ,typeReturn }:{ email?:string, typeReturn: "contain" | "not contain"}){
     try {
 
+        const pageSize = process.env.PageSize || "1"
+        const pageNum = process.env.PageNum || "30"
+        
+
         const params = {
-            "fields[0]":"video_name",
-            "fields[1]":"video_url",
-            "fields[2]":"description",
-            "fields[3]":"users_voted"
-          
-        }
+            "fields[0]": "video_name",
+            "fields[1]": "video_url",
+            "fields[2]": "description",
+            "fields[3]": "users_voted",
+            "populate": "*",
+            "pagination[page]": pageNum,     
+            "pagination[pageSize]": pageSize 
+          };
     
 
 
@@ -67,14 +74,18 @@ export async function getSignData({email ,typeReturn }:{ email?:string, typeRetu
    
 
         const dataJson = await response.json();
-  
+     
+        // console.log(dataJson)
 
          if(!email){
            throw new Error('Fail to fetch data')
          }
 
-        // filter data 
-        // console.log(dataJson)
+    
+        //  let count = 0
+        //  dataJson.data.forEach((item:any)=>
+        // console.log(item.attributes.users_voted[0],count++))
+        
 
 
         const result = getVideosNotVotedByUser(dataJson, typeReturn , email);

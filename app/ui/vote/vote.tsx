@@ -28,7 +28,7 @@ export default function Vote({id }:{id:number}) {
       }
 
       const res = await validateVideo(input)
-
+      //  console.log(res)
       if (res.status === 200) {
         setVoted(vote)
         setIsVoted(true)
