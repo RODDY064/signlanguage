@@ -3,7 +3,6 @@
 import React from 'react'
 import { Suspense } from 'react';
 import Search from '@/app/ui/search/search';
-import ErrorContainer from '@/app/ui/error/errorContainer';
 import LoadingContainer from '@/app/ui/loading/loading';
 
 
