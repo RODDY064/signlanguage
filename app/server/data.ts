@@ -82,9 +82,9 @@ export async function getSignData({email ,typeReturn }:{ email?:string, typeRetu
          }
 
     
-        //  let count = 0
-        //  dataJson.data.forEach((item:any)=>
-        // console.log(item.attributes.users_voted[0],count++))
+         let count = 0
+         dataJson.data.forEach((item:any)=>
+        console.log(item.attributes.users_voted[0],count++))
         
 
 
