@@ -94,7 +94,7 @@ export async function createUser(data: z.infer<typeof CreateUserSchema>) {
         if(error.message === 'User already exists.'){
             return { status: "error", message: "User already exists. Please sign in" };
         }
-        return { status: "error", message: "An error occurred oppp. Please try again." };
+        return { status: "error", message: "An error occurred. Please try again." };
     }
   }
 
