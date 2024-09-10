@@ -9,6 +9,7 @@ import { z } from "zod";
 import { loginUser, createUser } from "./action";
 import { UserSchema } from "./schema";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 // Define the types
 type UserType = z.infer<typeof UserSchema>;
@@ -60,6 +61,7 @@ export default function Form() {
           setError(result.error);
         } else {
           setError("");
+          toast.success('Sign In successfully')
           reset({ type: formType });
         }
       } catch (error: any) {
@@ -80,8 +82,9 @@ export default function Form() {
           console.log(result.message);
           setError(result.message);
         } else {
+          toast.success("Account registered successfully")
           setLoading(true);
-          setError(result.message);
+          setError("");
           setTimeout(() => {
              reset()
             setFormType("signIn");

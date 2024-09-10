@@ -2,14 +2,11 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 
-export default function LoadingContainer({title}:{title?:string}) {
+export default function LoadingContainer() {
   return (
-    <div className="w-full h-full mt-6 px-2 md:px-0">
-    <h1 className="px-2 md:px-0 pb-2 text-xl font-bold">{title?? `Videos`}</h1>
-    <div className="w-full border-t border-black/20 h-[12rem] pt-24 flex flex-col ">
+    <div className="w-full h-[12rem] pt-24 flex flex-col ">
      <Ring/>
     </div>
- </div>
   )
 }
 

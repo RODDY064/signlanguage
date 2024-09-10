@@ -1,16 +1,19 @@
 "use client"
 
 import { validateVideo } from "@/app/server/validate"
-import { useSession } from "next-auth/react"
-import { useState , useEffect } from "react"
+import { useState, useEffect } from "react"
+import Cookies from "js-cookie"
+import toast from "react-hot-toast"
 
-export default function Vote({id }:{id:number}) {
-  const { data : session , update } = useSession()
+const ONE_DAY_IN_MS = 1; // Expire cookie in 1 day
+
+export default function Vote({id }:{id?:string}) {
   const [voted, setVoted] = useState<"correct" | "wrong">('correct')
   const [isVoted, setIsVoted] = useState<boolean>(false)
 
+  // Fetch the stored vote from cookies
   useEffect(() => {
-    const storedVote = localStorage.getItem(`vote_${id}`)
+    const storedVote = Cookies.get(`vote_${id}`)
     if (storedVote) {
       setVoted(storedVote as "correct" | "wrong")
       setIsVoted(true)
@@ -18,25 +21,23 @@ export default function Vote({id }:{id:number}) {
   }, [id])
 
   const handleVote = async (vote: "correct" | "wrong") => {
-    
-    if (session?.user) {
-      const input = {
-        id: id,
-        user_id: session.user.id,
-        email: session.user.email,
-        type: vote
-      }
+    const input = {
+      videoId: id as string,
+      type: vote
+    }
 
-      const res = await validateVideo(input)
-      //  console.log(res)
-      if (res.status === 200) {
-        setVoted(vote)
-        setIsVoted(true)
-        localStorage.setItem(`vote_${id}`, vote)
-      }
-      console.log('love')
-    }else{
-      update()
+    const res = await validateVideo(input)
+    
+    if (res.status === 200) {
+      toast.success('You have successfully voted on the video')
+      setVoted(vote)
+      setIsVoted(true)
+      
+      // Store the vote in cookies with a 1-day expiration
+      Cookies.set(`vote_${id}`, vote, { expires: ONE_DAY_IN_MS })
+    } else if (res.status === 201) {
+      setIsVoted(true)
+      toast.error("You have already voted")
     }
   }
 

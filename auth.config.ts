@@ -1,11 +1,10 @@
 import { AuthError, type NextAuthConfig } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
 
-
-
-
-
+const prisma = new PrismaClient();
 
 export default {
   providers: [
@@ -15,34 +14,35 @@ export default {
         username: {},
         password: {},
       },
-      authorize: async (credentials: Partial<Record<"username" | "password", unknown>>) => {
-        let user = null
-        // Find user by username and password 
-
-        const apiToken = process.env.API_TOKEN;
-         
-        user = await fetch(`${process.env.API_BASE_URL}/custom-user/login`,{
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            "Authorization": `Bearer ${apiToken}` 
+      authorize: async (
+        credentials: Partial<Record<"username" | "password", unknown>>
+      ) => {
+        let user = null;
+        // Find user by username and password
+        user = await prisma.user.findFirst({
+          where: {
+            email: credentials.username as string,
           },
-          body: JSON.stringify(credentials)
-        }).then(async (res) => {
-          if (res.ok && res.status === 200) {
-             const data = await res.json()
-             
-            return data.user
-          } else {
-            return null
-          }
-        })
-  
+        });
+
+        // compare password
+        const isValid = await bcrypt.compare(
+          credentials.password as string,
+          user?.password as string
+        );
+
+        if (!isValid) {
+          throw new AuthError("Invalid username or password", {
+            type: "CredentialsSignin",
+          });
+        }
 
         if (!user) {
-          throw new AuthError("Invalid username or password", { type:"CredentialsSignin" });
+          throw new AuthError("Invalid username or password", {
+            type: "CredentialsSignin",
+          });
         }
-       // return user object with their profile data
+        // return user object with their profile data
         return user;
       },
     }),
@@ -52,76 +52,20 @@ export default {
     signOut: "/",
   },
   callbacks: {
-    async jwt({ token, user , trigger}) {
-      if (user) {
-        token.id = user.id;
-        token.username = user.username;
-        token.firstname = user.firstname;
-        token.lastname = user.lastname;
-        token.email = user.email;
-        token.emailVerified = user.emailVerified;
-        token.total_votes = user.total_votes;
-        token.correctness = user.correctness;
-        token.wrongness = user.wrongness;
+    async jwt({ token, user, trigger }) {
+      if(user){
+        token.id = user.id
 
-        // console.log('JWT callback',{user});
       }
-
-      if(trigger === "update" && user){
-        token.id = user.id;
-        token.username = user.username;
-        token.firstname = user.firstname;
-        token.lastname = user.lastname;
-        token.email = user.email;
-        token.emailVerified = user.emailVerified;
-        token.total_votes = user.total_votes;
-        token.correctness = user.correctness;
-        token.wrongness = user.wrongness;
-
-        // console.log('JWT callback',{user});
-      }
-
-
+      // console.log(token,'token')
       return token;
     },
     async session({ session, token, trigger }) {
-      if (token) {
-        session.user = {
-          id: token.id as string,
-          username: token.username as string,
-          firstname: token.firstname as string,
-          lastname: token.lastname as string,
-          email: token.username as string,
-          total_votes: token.total_votes as number,
-          correctness: token.correctness as number,
-          wrongness: token.wrongness as number,
-          emailVerified: token.emailVerified as Date | null, 
-        };
-
-        if(trigger === "update" && token){
-          session.user = {
-            id: token.id as string,
-            username: token.username as string,
-            firstname: token.firstname as string,
-            lastname: token.lastname as string,
-            email: token.username as string,
-            total_votes: token.total_votes as number,
-            correctness: token.correctness as number,
-            wrongness: token.wrongness as number,
-            emailVerified: token.emailVerified as Date | null, 
-          };
-  
-        }
-
-
+      if(token){
+        session.user.id = token.id as string
       }
-
-    
-      // console.log('Session callback');
-      // console.log({ session, token });
-
+      // console.log(session,'session')
       return session;
-    }
-  }
+    },
+  },
 } as NextAuthConfig; // Add type assertion
-
