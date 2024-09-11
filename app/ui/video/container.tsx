@@ -85,9 +85,10 @@ export default function Container() {
 
   return (
     <div className="w-full h-full mt-6 px-2 md:px-0">
-      <div className="flex justify-between">
+      <div className="flex flex-col gap-2 md:flex-row md:justify-between">
         <h1 className="px-2 md:px-0 pb-2 text-xl font-bold">Videos</h1>
-        <Pagination />
+        <div className="w-full  flex items-center justify-center md:items-start md:justify-start py-1 md:py-0
+        md:w-auto"><Pagination/></div>
         <h1 className="opacity-0 hidden md:flex">1</h1>
       </div>
       <div className="w-full h-full overflow-hidden overflow-y-scroll pt-4 pb-[12rem] md:pb-[8rem] 2xl:pb-auto border-t border-black/20 px-4 md:px-0 lg:pl-6 xl:pl-4 py-4 gap-6 2xl:gap-6 md:gap-4 flex place-content-start md:flex-wrap flex-col items-center md:items-start md:flex-row ">

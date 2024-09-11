@@ -13,12 +13,24 @@ export default function Nav() {
   const { setIsOpen, isOpen} = useMobile()
   const [isMobile , setIsMobile] = useState<boolean>(false)
 
-   useEffect(()=>{
-    if(window.innerHeight > 768){
-      setIsMobile(true)
-    }
-   },[])
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 760) {
+        setIsMobile(true);
+      } else {
+        setIsMobile(false);
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
+   useEffect(()=>{
+   console.log(isMobile)
+   },[isMobile])
 
   return (
    <>

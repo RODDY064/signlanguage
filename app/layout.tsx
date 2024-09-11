@@ -27,9 +27,9 @@ export default function RootLayout({
         <Toaster/>
         <MobileContextProvider>
         <SessionProvider>
-          <MobileNav/>
          <PaginationContext>
          <main>
+         <MobileNav/>
          {children}
          </main>
          </PaginationContext>

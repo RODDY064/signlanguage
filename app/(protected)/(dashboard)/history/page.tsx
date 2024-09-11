@@ -72,9 +72,10 @@ export default  function History() {
   return (
     <div className='w-full h-screen overflow-hidden    md:pl-[13rem] lg:pl-[17rem] md:pr-6 pt-24 md:pt-8 items-center  flex flex-col '>
       <div className='w-[95%] h-full'>
-      <div className='w-full h-12 flex items-center justify-between'>
+      <div className='w-full min-h-12 md:items-center gap-2  flex flex-col md:flex-row md:justify-between'>
         <p className='text-2xl font-bold'>History</p>
-        <Pagination/>
+        <div className="w-full  flex items-center justify-center md:items-start md:justify-start py-1 md:py-0
+        md:w-auto"><Pagination/></div>
         <p className="opacity-0 hidden md:flex">1</p>
       </div>
       <div className='w-full h-full overflow-y-scroll pb-20 border-t border-black/40 pt-6 mt-4 flex md:flex-wrap flex-col items-center md:flex-row md:items-start gap-4 place-content-start'>
