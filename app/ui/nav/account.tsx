@@ -3,17 +3,27 @@
 import { getSession, useSession } from "next-auth/react";
 import { createVideos } from "../form/action";
 import { useEffect, useState } from "react";
+import { get } from "http";
+import { getUserStats } from "@/app/server/data";
 
+interface StatsProps {
+ totalVotes:number,
+ correctPercentage:number,
+  wrongPercentage:number
+}
 
 
 export default function Account() {
    const [session,setSession] = useState<any>(null)
+   const [stats,setStats] = useState<StatsProps| null>(null)
    const [loading, setLoading] = useState(false)
 
    const fetchSession = async () => {
     const sessionData = await getSession(); 
+    const statRes = await getUserStats()
     setSession(sessionData)
-    if(sessionData){
+    setStats(statRes)
+    if(sessionData && statRes){
       setLoading(true)
     }
   };
@@ -38,9 +48,9 @@ export default function Account() {
        <div className="mt-2 text-black/60">
        <p className="">Username : {session?.user?.name}</p>
        <p className="">Email : {session?.user?.email}</p>
-      <p className="">Total Number of Votes : {session?.user?.total_votes ? session.user.total_votes : 0}</p>
-       <p>Correctness Scores : {session?.user?.correctness && session?.user.total_votes ? calculatePercentage(session.user.correctness,session.user.total_votes) : 0}%</p>
-       <p>Wrongness Scores : {session?.user?.correctness && session?.user.total_votes ? calculatePercentage(session.user.wrongness,session.user.total_votes) : 0}%</p>
+      <p className="">Total Number of Votes : {stats?.totalVotes ?? 0}</p>
+       <p>Correctness Scores : {stats?.correctPercentage?? 0}%</p>
+       <p>Wrongness Scores : {stats?.wrongPercentage?? 0}%</p>
        </div>
        </>)
        }

@@ -3,6 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useMobile } from "./mobileContext"
+import { signOut } from "next-auth/react"
 
 export default function MobileNav() {
 
@@ -32,8 +33,7 @@ export default function MobileNav() {
            onClick={()=>setIsOpen(false)}
           src="/icons/x.svg" 
           className="cursor-pointer" width={24} height={24} alt="close"/>
-       </div>
-      
+         </div>
          <ul className="flex items-center  flex-col my-6  gap-2 ">
           {Links.map((link,index)=>(
            <Link
@@ -48,6 +48,12 @@ export default function MobileNav() {
   
           }
          </ul>
+          <div
+          className="flex justify-center pl-4">
+            <p 
+            onClick={()=>signOut()}
+            className="w-[50%] text-blue-600 text-lg font-semibold">Sign Out</p>
+          </div>
       </div>)}
     </>
   )
