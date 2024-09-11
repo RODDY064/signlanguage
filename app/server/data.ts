@@ -189,8 +189,8 @@ export async function getUserStats() {
     ).length;
 
     //percentage of correct and wrong votes
-    const correctPercentage = totalVotes ? (correctVotes / totalVotes) * 100 : 0;
-    const wrongPercentage = totalVotes ? (wrongVotes / totalVotes) * 100 : 0;
+    const correctPercentage = totalVotes ? ((correctVotes / totalVotes) * 100).toFixed(2) : 0;
+    const wrongPercentage = totalVotes ? ((wrongVotes / totalVotes) * 100).toFixed(2) : 0;
     // console.log(totalVotes, correctVotes, wrongVotes);
     // console.log(correctPercentage, wrongPercentage);
 

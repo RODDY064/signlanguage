@@ -8,8 +8,8 @@ import { getUserStats } from "@/app/server/data";
 
 interface StatsProps {
  totalVotes:number,
- correctPercentage:number,
-  wrongPercentage:number
+ correctPercentage:string | number,
+  wrongPercentage:string | number
 }
 
 
@@ -35,7 +35,7 @@ export default function Account() {
 
   return (
     <div 
-    className='right-1 w-[20rem]  md:right-4 md:w-[26rem] h-[12rem]  rounded-[15px] max-sm:pl-6 bg-white shadow-custom border border-gray-200 absolute p-4 z-[70]'>
+    className='right-1 w-[20rem]  md:right-4 md:w-[26rem] h-[12rem]  rounded-[15px]  bg-white shadow-custom border border-gray-200 absolute p-4 px-6 z-[70]'>
         <h1
          onClick={()=> createVideos()}
          className="text-xl font-medium cursor-pointer">Account</h1>
