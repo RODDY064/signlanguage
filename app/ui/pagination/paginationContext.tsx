@@ -6,6 +6,7 @@ import {
   ReactNode,
   SetStateAction,
   useContext,
+  useEffect,
   useState,
 } from "react";
 
@@ -24,7 +25,7 @@ const paginationContext = createContext<{
 export default function PaginationContext({ children }: { children: ReactNode }) {
   const [pagination, setPagination] = useState<PaginationProps>({
     current: 1,
-    pageSize: 6,
+    pageSize: 21,
     total: 3,
   });
 
@@ -33,6 +34,10 @@ export default function PaginationContext({ children }: { children: ReactNode })
       setPagination((prev) => ({ ...prev, current: newPage }));
     }
   };
+
+  useEffect(()=>{
+   console.log(pagination)
+  },[pagination])
 
   return (
     <paginationContext.Provider value={{ pagination, setPagination, setPage }}>

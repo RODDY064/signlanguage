@@ -34,7 +34,7 @@ export default function Vote({id }:{id?:string}) {
     const res = await validateVideo(input)
     
     if (res.status === 200) {
-      toast.success('You have successfully voted on the video')
+      toast.success('You have successfully voted')
       setVoted(vote)
       setIsVoted(true)
       

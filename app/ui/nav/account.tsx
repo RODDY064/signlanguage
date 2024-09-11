@@ -37,6 +37,7 @@ export default function Account() {
     <div 
     className='right-4 w-[26rem] h-[12rem]  rounded-[15px] bg-white shadow-custom border border-gray-200 absolute p-4 z-[70]'>
         <h1
+         onClick={()=> createVideos()}
          className="text-xl font-medium cursor-pointer">Account</h1>
        {!loading ? 
        (<>

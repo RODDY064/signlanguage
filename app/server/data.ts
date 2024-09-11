@@ -25,7 +25,7 @@ export async function getSignData({
 }) {
   try {
     const session = await auth();
-    const pageSize = 6;
+    const pageSize = 21;
     const totalCount =
       typeReturn === "not contain"
         ? await prisma.video.count({
@@ -189,9 +189,8 @@ export async function getUserStats() {
     ).length;
 
     //percentage of correct and wrong votes
-    const correctPercentage = (correctVotes / totalVotes) * 100;
-    const wrongPercentage = (wrongVotes / totalVotes) * 100;
-
+    const correctPercentage = totalVotes ? (correctVotes / totalVotes) * 100 : 0;
+    const wrongPercentage = totalVotes ? (wrongVotes / totalVotes) * 100 : 0;
     // console.log(totalVotes, correctVotes, wrongVotes);
     // console.log(correctPercentage, wrongPercentage);
 
