@@ -85,7 +85,7 @@ export default function Container() {
 
   return (
     <div className="w-full h-full mt-6 px-2 md:px-0">
-      <div className="flex justify-between">
+      <div className="flex flex-col gap-2 md:flex-row md:justify-between">
         <h1 className="px-2 md:px-0 pb-2 text-xl font-bold">Videos</h1>
         <Pagination />
         <h1 className="opacity-0 hidden md:flex">1</h1>
