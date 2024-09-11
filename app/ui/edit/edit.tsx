@@ -91,6 +91,7 @@ export default function Edit() {
     if (storedVote) {
       console.log("Vote found in cookies:", storedVote);
     }
+    console.log(storedVote);
   }, [id]);
 
   return (

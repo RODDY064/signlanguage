@@ -90,4 +90,3 @@ model Vote {
   User User @relation(fields: [userId], references: [id])
 }
 
-

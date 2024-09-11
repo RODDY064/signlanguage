@@ -23,20 +23,25 @@ export async function POST(request: Request) {
     const [videoData, voteData] = await prisma.$transaction([
         prisma.video.update({
           where: {
-            id: id,
+            id: id, // The id of the video being updated
           },
           data: {
-            description: description,
+             video_name: description, // New video description
           },
         }),
-        prisma.vote.create({
+        prisma.vote.update({
+          where: {
+            userId_videoId: {
+              userId: session?.user?.id as string, 
+              videoId: id, 
+            },
+          },
           data: {
-            userId: session?.user?.id as string,
-            videoId: id,
-            voteType: vote,
+            voteType: vote, 
           },
         }),
       ]);
+      
 
     //   console.log(videoData, voteData);
 

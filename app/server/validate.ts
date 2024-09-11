@@ -46,7 +46,7 @@ export async function validateVideo(input: ValidateType) {
       }
     })
 
-    console.log(votedAlready?.votes[0]?.voteType)
+    console.log(votedAlready?.votes[0]?.voteType,'vote')
 
     if(votedAlready){
      return { status:201, message:"Already voted" , vote:votedAlready.votes[0].voteType}

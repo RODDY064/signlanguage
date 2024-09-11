@@ -13,12 +13,17 @@ export default function Vote({id }:{id?:string}) {
 
   // Fetch the stored vote from cookies
   useEffect(() => {
-    const storedVote = Cookies.get(`vote_${id}`)
+    const storedVote = Cookies.get(`video_${id}`)
     if (storedVote) {
       setVoted(storedVote as "correct" | "wrong")
       setIsVoted(true)
     }
+    console.log(storedVote)
   }, [id])
+
+  useEffect(()=>{
+   console.log(isVoted)
+  },[isVoted])
 
   const handleVote = async (vote: "correct" | "wrong") => {
     const input = {
@@ -34,9 +39,10 @@ export default function Vote({id }:{id?:string}) {
       setIsVoted(true)
       
       // Store the vote in cookies with a 1-day expiration
-      Cookies.set(`vote_${id}`, vote, { expires: ONE_DAY_IN_MS })
+      Cookies.set(`video_${id}`, vote, { expires: ONE_DAY_IN_MS });
     } else if (res.status === 201) {
       setIsVoted(true)
+      setVoted(res.vote as "correct" | "wrong")
       toast.error("You have already voted")
     }
   }

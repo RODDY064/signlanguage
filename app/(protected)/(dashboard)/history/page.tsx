@@ -8,6 +8,7 @@ import { usePagination } from "@/app/ui/pagination/paginationContext";
 import { auth } from "@/auth"
 import Link from "next/link"
 import { useEffect, useState } from "react";
+import { formatVideoId } from '@/utils/videoUrl';
 
 
 export default  function History() {
@@ -87,9 +88,7 @@ export default  function History() {
         {!state.loading && !state.error && 
         (<>
           {data?.map((item)=>(
-            <>
             <HistoryCard key={item.id} data={item} />
-            </>
            ))}
           </>
         )}
@@ -107,7 +106,7 @@ const HistoryCard = ({ data  }:{ data:Video})=>{
     <div className='w-[20rem] h-[17rem] border border-black/30 cursor-pointer rounded-[25px] p-2'>
       <div className='w-full h-[10.5rem] rounded-2xl border border-black/10 '>
       <video  muted className='w-full h-full'>
-            <source src={data.video_url} type="video/mp4"/>
+            <source src={`https://videos.vskuul.com/${formatVideoId(data.video_url)}`} type="video/mp4"/>
         </video>
       </div>
       <div className='py-2'>
