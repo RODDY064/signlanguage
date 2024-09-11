@@ -28,7 +28,6 @@ export default  function History() {
         typeReturn: "contain",
       });
       if (apiData) {
-        console.log(apiData)
         setData(apiData.data);
         setState({
           success: true,
@@ -58,10 +57,6 @@ export default  function History() {
       })
     }
   }
-
-  useEffect(()=>{
-  console.log(data)
-  },[data])
  
 
   useEffect(() => {
@@ -80,7 +75,7 @@ export default  function History() {
       <div className='w-full h-12 flex items-center justify-between'>
         <p className='text-2xl font-bold'>History</p>
         <Pagination/>
-        <p className='opacity-0'>1</p>
+        <p className="opacity-0 hidden md:flex">1</p>
       </div>
       <div className='w-full h-full overflow-y-scroll pb-20 border-t border-black/40 pt-6 mt-4 flex md:flex-wrap flex-col items-center md:flex-row md:items-start gap-4 place-content-start'>
          {state.loading && <LoadingContainer/>}
@@ -103,8 +98,8 @@ const HistoryCard = ({ data  }:{ data:Video})=>{
   const userVote = data?.votes[0]?.voteType
 
   return(
-    <div className='w-[20rem] h-[17rem] border border-black/30 cursor-pointer rounded-[25px] p-2'>
-      <div className='w-full h-[10.5rem] rounded-2xl border border-black/10 '>
+    <div className='w-[90%] md:w-[20rem] h-[17rem] border border-black/30 cursor-pointer rounded-[25px] p-2'>
+      <div className='w-full h-[10.5rem] rounded-2xl border border-black/10 overflow-hidden'>
       <video  muted className='w-full h-full'>
             <source src={`https://videos.vskuul.com/${formatVideoId(data.video_url)}`} type="video/mp4"/>
         </video>

@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext ,useContext,useState } from "react";
+import { createContext ,useContext,useEffect,useState } from "react";
 
 
 const mobileContext = createContext<{
@@ -11,6 +11,7 @@ const mobileContext = createContext<{
 
 function MobileContextProvider({children}:{ children:React.ReactNode}) {
     const [isOpen, setIsOpen] = useState<boolean>(false)
+
   return (
     <mobileContext.Provider value={{ isOpen, setIsOpen}}>
       {children}

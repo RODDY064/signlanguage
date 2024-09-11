@@ -29,7 +29,9 @@ export default function RootLayout({
         <SessionProvider>
           <MobileNav/>
          <PaginationContext>
+         <main>
          {children}
+         </main>
          </PaginationContext>
         </SessionProvider>
         </MobileContextProvider>

@@ -27,11 +27,17 @@ export default function Nav() {
         <Image id="mobileLogo" src="/icons/logo.svg" width={130} height={130} alt="logo"/>
       </h1>
       {isMobile && 
-      <div className='cursor-pointer md:hidden'>
+      <div className='cursor-pointer md:hidden flex gap-2 items-center'>
       <Image
        id="menu"
        onClick={()=>setIsOpen(true)}
       src="/icons/menu.svg" width={35} height={35} alt="menu"/>
+      <div className='relative'>
+        <div onClick={()=>setAccountTabIsActive(!accountTabIsActive)} className='size-10 rounded-full border border-black/20 flex items-center justify-center cursor-pointer'>
+          <Image src="/icons/user.svg" width={20} height={20} alt='user'/>
+        </div>
+         {accountTabIsActive && <Account/>}
+        </div>
        </div>}
       <div className='hidden md:flex gap-6 items-center'>
         <div className='relative'>

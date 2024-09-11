@@ -27,8 +27,8 @@ export default function Card({ video }:{video:any}) {
 
   return (
     <Link
-      className='w-full md:w-auto'
-     id="card" href={`/video/${video.id}?id=${video.id}`}>
+      className='w-full px-4 md:px-0 md:w-auto'
+     id={`card ${video.id}`} href={`/video/${video.id}?id=${video.id}`}>
     <div className='w-full  md:w-[16rem] lg:w-[20rem] xl:w-[20rem] h-[17rem] border-2 hover:border-sky-500/60 flex-none rounded-[25px] border-black/10 p-2 cursor-pointer'>
         <div className='w-full h-[70%] rounded-[23px] border border-black/10 overflow-hidden'>
         <video  ref={videoRef} muted className='w-full h-full'>

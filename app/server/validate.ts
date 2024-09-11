@@ -31,6 +31,7 @@ export async function validateVideo(input: ValidateType) {
     const session  = await auth()
     const votedAlready = await prisma.video.findFirst({
       where:{
+        id:videoId,
         votes:{
           some:{
             userId:session?.user?.id
@@ -61,7 +62,7 @@ export async function validateVideo(input: ValidateType) {
       }
     })
 
-    console.log(voteData)
+    // console.log(voteData)
 
     console.log('Data updated successfully');
     return { status: 200, message: 'Data updated successfully' };

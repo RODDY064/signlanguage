@@ -31,7 +31,6 @@ export default function Container() {
         typeReturn: "not contain",
       });
       if (apiData) {
-        console.log(apiData)
         setData(apiData.data);
         setFilteredData(apiData.data);
         setState({
@@ -89,7 +88,7 @@ export default function Container() {
       <div className="flex justify-between">
         <h1 className="px-2 md:px-0 pb-2 text-xl font-bold">Videos</h1>
         <Pagination />
-        <h1 className="opacity-0">1</h1>
+        <h1 className="opacity-0 hidden md:flex">1</h1>
       </div>
       <div className="w-full h-full overflow-hidden overflow-y-scroll pt-4 pb-[12rem] md:pb-[8rem] 2xl:pb-auto border-t border-black/20 px-4 md:px-0 lg:pl-6 xl:pl-4 py-4 gap-6 2xl:gap-6 md:gap-4 flex place-content-start md:flex-wrap flex-col items-center md:items-start md:flex-row ">
          {state.loading && <LoadingContainer/>}
