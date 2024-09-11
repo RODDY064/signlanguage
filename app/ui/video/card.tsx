@@ -1,7 +1,8 @@
+import { formatVideoId } from '@/utils/videoUrl';
 import Image from 'next/image'
 import Link from 'next/link'
-
 import { useRef } from 'react'
+
 
 export default function Card({ video }:{video:any}) {
 
@@ -22,20 +23,21 @@ export default function Card({ video }:{video:any}) {
         }
     }
 
-    const url = process.env.API_URL
-
+  
 
   return (
-    <Link id="card" href={`/video/${video.id}?id=${video.id}`}>
-    <div className='w-full md:w-[16rem] lg:w-[20rem] xl:w-[20rem] h-[17rem] border-2 hover:border-sky-500/60 flex-none rounded-[25px] border-black/10 p-2 cursor-pointer'>
+    <Link
+      className='w-full md:w-auto'
+     id="card" href={`/video/${video.id}?id=${video.id}`}>
+    <div className='w-full  md:w-[16rem] lg:w-[20rem] xl:w-[20rem] h-[17rem] border-2 hover:border-sky-500/60 flex-none rounded-[25px] border-black/10 p-2 cursor-pointer'>
         <div className='w-full h-[70%] rounded-[23px] border border-black/10 overflow-hidden'>
         <video  ref={videoRef} muted className='w-full h-full'>
-            <source src={video.attributes.video_url} type="video/mp4"/>
+            <source src={`https://videos.vskuul.com/${formatVideoId(video.video_url)}`} type="video/mp4"/>
         </video>
         </div>
         <div className='w-full flex justify-between gap-2 pt-2 px-2'>
            <div className='w-[85%]'>
-           <h2 className='w-full  truncate font-medium my-2'>{video.attributes.video_name}</h2>
+           <h2 className='w-full  truncate font-medium my-2'>{video.video_name}</h2>
            </div>
            <div className='size-8 border flex-none border-black/20 rounded-full flex items-center justify-center '>
             <Image src="/icons/dot.svg" width={20} height={20} alt="dot icon" />

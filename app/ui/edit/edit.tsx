@@ -6,24 +6,20 @@ import { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateDataSchema, UpdateDataSchemaType } from "../form/schema";
-import { useSession } from "next-auth/react";
+import Cookies from "js-cookie"; // Import Cookies
 import { useRouter, useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
+
+const ONE_DAY_IN_MS = 1; // Cookies expiration in 1 day
 
 export default function Edit() {
   const [uploadedFile, setUploadedFile] = useState<File | undefined>(undefined);
   const [error, setError] = useState<string>("");
   const { setEdit } = useEdit();
   const searchParams = useSearchParams();
-  const id = searchParams.get('id')
-  const router = useRouter()
-  
+  const id = searchParams.get("id");
+  const router = useRouter();
 
-  const { data:session } = useSession()
-
-//   useEffect(()=>{
-//  console.log(uploadedFile)
-//   },[uploadedFile])
-   
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -40,64 +36,68 @@ export default function Edit() {
         setError("File size exceeds 20 MB. Please upload a smaller video.");
         return;
       }
-  
+
       setUploadedFile(file);
       setError(""); // Clear any previous error messages
     }
   };
 
-
-  const { register, handleSubmit,  formState: { errors }} = useForm<UpdateDataSchemaType>({
+  const { register, handleSubmit, formState: { errors } } = useForm<UpdateDataSchemaType>({
     resolver: zodResolver(updateDataSchema),
   });
 
   const onSubmit: SubmitHandler<UpdateDataSchemaType> = async (data) => {
-    
-  const formData = new FormData();
-  formData.append("description", data.description);
-  formData.append("vote", data.vote)
+    const formData = new FormData();
+    formData.append("description", data.description);
+    formData.append("vote", data.vote);
 
-  console.log(id)
+    console.log(id);
 
-  if (id && session?.user.email) {
-    formData.append('id', id);
-    formData.append('email',session.user.email)
-  } else {
-    throw new Error('User session is not available or user ID is missing.');
-  }
-  
+    if (id) {
+      formData.append("id", id);
+    } else {
+      return;
+    }
 
-   if (uploadedFile) {
-    formData.append("video", uploadedFile);
-   }
+    if (uploadedFile) {
+      formData.append("video", uploadedFile);
+    }
+
     try {
-      const response = await fetch('/api/video', {
-        method: 'POST',
+      const response = await fetch("/api/video", {
+        method: "POST",
         body: formData,
       });
-  
-      if (response.ok) {
-        console.log('Form submitted successfully.');
-        setEdit(false);
-        // get the video id in the local storage and update the vote
-        localStorage.setItem(`video_${id}`, data.vote)      
-        router.push('/dashboard')
-        
-      } else {
-        throw new Error('Fail to submit the form')
-      }
 
+      if (response.ok) {
+        console.log("Form submitted successfully.");
+        toast.success("Video update successfully");
+        setEdit(false);
+        // Store the video vote in cookies with 1-day expiration
+        Cookies.set(`video_${id}`, data.vote, { expires: ONE_DAY_IN_MS });
+
+        router.push("/dashboard");
+      } else {
+        throw new Error("Failed to submit the form");
+      }
     } catch (error) {
       console.error("Error in updateData:", error);
       setError("Failed to submit the form. Please try again.");
     }
   };
 
+  useEffect(() => {
+    const storedVote = Cookies.get(`video_${id}`);
+    if (storedVote) {
+      console.log("Vote found in cookies:", storedVote);
+    }
+    console.log(storedVote);
+  }, [id]);
 
   return (
     <div className="w-full h-full top-0 bottom-0 fixed z-[90] bg-black/30 flex items-center justify-center">
-      <div className="w-[90%] min-h-[70%] md:w-[70%] xl:w-[40%] md:min-h-[40rem] 2xl:h-[45rem]  bg-white rounded-[12px] md:rounded-[15px] py-4 p-6">
-        <div  className="w-full flex items-center justify-between">
+      <div className="w-[90%] min-h-[70%] md:w-[70%] xl:w-[40%] md:min-h-[40rem] 2xl:h-[45rem] bg-white rounded-[12px] md:rounded-[15px] py-4 p-6">
+        <div className="w-full flex items-center justify-between">
           <h1 className="text-xl text-blue-500">Edit</h1>
           <div id="edit_close" onClick={() => setEdit(false)} className="">
             <Image
@@ -117,7 +117,7 @@ export default function Edit() {
               id="description"
               {...register("description")}
               name="description"
-              className="w-full min-h-[200px] max-h-[200px] bg-transparent border focus:outline-none border-black/20 focus:border-blue-500/70 
+              className="w-full min-h-[180px] max-h-[200px] bg-transparent border focus:outline-none border-black/20 focus:border-blue-500/70 
                rounded-[8px] p-2 mt-2 mb-2"
             />
             {errors.description && (
@@ -132,7 +132,7 @@ export default function Edit() {
               >
                 <div className="flex flex-col items-center justify-center pt-5 pb-6 mb-5">
                   <svg
-                    className="w-8 h-8 mb-4 text-gray-400 "
+                    className="w-8 h-8 mb-4 text-gray-400"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -146,16 +146,14 @@ export default function Edit() {
                       d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                     />
                   </svg>
-                  <p className="mb-2 text-sm text-gray-400 ">
-                    <span className="font-semibold">Click to upload</span> or
-                    drag and drop
+                  <p className="mb-2 text-sm text-gray-400">
+                    <span className="font-semibold">Click to upload</span> or drag and drop
                   </p>
-                  <p className="text-xs text-gray-400 ">
+                  <p className="text-xs text-gray-400">
                     MP4, WebM, or Ogg (MAX. 20 MB)
                   </p>
                 </div>
                 <input
-                 disabled={true}
                   name="video"
                   id="dropzone-file"
                   type="file"
@@ -171,13 +169,10 @@ export default function Edit() {
               )}
             </div>
             <div className="w-full max-sm:text-center my-5">
-              <label className="text-[15px]  font-medium">
-                Please select a value to vote
-              </label>
+              <label className="text-[15px] font-medium">Please select a value to vote</label>
               <div className="flex my-2 gap-6 justify-center items-center w-full">
                 <li className="flex gap-2 items-center">
                   <input
-  
                     value="correct"
                     {...register("vote", { required: true })}
                     type="radio"
@@ -186,9 +181,7 @@ export default function Edit() {
                     className="styled-checkbox"
                     id="correct"
                   />
-                  <label htmlFor="correct" className="text-green-600">
-                    Correct
-                  </label>
+                  <label htmlFor="correct" className="text-green-600">Correct</label>
                 </li>
                 <li className="flex gap-2 items-center">
                   <input
@@ -200,9 +193,7 @@ export default function Edit() {
                     className="styled2-checkbox"
                     id="wrong"
                   />
-                  <label htmlFor="wrong" className="text-red-600">
-                    Wrong
-                  </label>
+                  <label htmlFor="wrong" className="text-red-600">Wrong</label>
                 </li>
               </div>
             </div>

@@ -1,188 +1,138 @@
-interface User {
-    email: string;
-    type: 'correct' | 'wrong';
-  }
-  
-  interface VideoAttributes {
-    video_name: string;
-    description: string;
-    video_url: string;
-    users_voted: User[];
-  }
-  
-  interface Video {
-    id: number;
-    attributes: VideoAttributes;
-  }
-  
-  interface DataJson {
-    data: Video[];
-  }
+'use server'
 
-  function getVideosNotVotedByUser(
-    dataJson: DataJson,
-    typeReturn: "not contain" | "contain", 
-    userEmail?: string 
-  ): Video[] {
-    // Return all videos if no email is provided
-    if (!userEmail) return dataJson.data;
-  
-    return dataJson.data.filter(video => {
-      // Include videos where users_voted is null
-      if (video.attributes.users_voted === null) return typeReturn === "not contain";
-  
-      const userHasVoted = video.attributes.users_voted.some(user => user.email === userEmail);
-      // For "contain", return true if userHasVoted is true
-      // For "not contain", return true if userHasVoted is false
-      return typeReturn === "contain" ? userHasVoted : !userHasVoted;
-    });
-  }
-  
+import { auth } from "@/auth";
+import { PrismaClient } from "@prisma/client";
 
-export async function getSignData({email ,typeReturn }:{ email?:string, typeReturn: "contain" | "not contain"}){
-    try {
+const prisma = new PrismaClient();
 
-        const pageSize = process.env.PageSize || "1"
-        const pageNum = process.env.PageNum || "30"
-        
-
-        const params = {
-            "fields[0]": "video_name",
-            "fields[1]": "video_url",
-            "fields[2]": "description",
-            "fields[3]": "users_voted",
-            "populate": "*",
-            "pagination[page]": pageNum,     
-            "pagination[pageSize]": pageSize 
-          };
-    
-
-
-        const url = new URL(`${process.env.API_BASE_URL}/signs`);
-        Object.entries(params).forEach(([key, value]) => url.searchParams.append(key, value));
-       
-        const apiToken = process.env.API_TOKEN;
-
-        const response = await fetch(url.toString(),{
-            method:"GET",
-             cache: 'no-cache',
-            headers:{
-                "content-type":"application/json",
-                "Authorization": `Bearer ${apiToken}` 
-            }
-        })
-   
-
-        const dataJson = await response.json();
-     
-        // console.log(dataJson)
-
-         if(!email){
-           throw new Error('Fail to fetch data')
-         }
-
-    
-        //  let count = 0
-        //  dataJson.data.forEach((item:any)=>
-        // console.log(item.attributes.users_voted[0],count++))
-        
-
-
-        const result = getVideosNotVotedByUser(dataJson, typeReturn , email);
-        // console.log(result , typeReturn);
-
-    
-        if (!response.ok) {
-            throw new Error(dataJson.message || "Fail to fetch data")
-        }
-        // console.log(dataJson.data)
-        return result
-    } catch (error) {
-        console.log(error)
-        throw new Error("Fail to fetch data")
-    }
+export  interface Video {
+  id: string;
+  video_name:string,
+  video_url:string,
+  description?:string | null,
+  final_gross?:string | null,
+  createdAt: Date;
+   updatedAt: Date;
+   votes?:any
 }
 
-// get similar data 
 
-export async function getSimilarData({noOfItems, currentItemID , email, typeReturn }:{noOfItems:number,currentItemID:number , email?:string, typeReturn: "not contain" | "contain"}){
-    try {
+export async function getSignData({
+  pagination,
+  typeReturn,
+}: {
+  pagination: number;
+  typeReturn: "contain" | "not contain";
+}) {
+  try {
+    const session = await auth()
+    const pageSize = 6;
+    const totalCount = await prisma.video.count();
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const skip = (pagination - 1) * pageSize;
 
-        const params = {
-            "fields[0]":"video_name",
-            "fields[1]":"video_url",
-            "fields[2]":"description",
-            "fields[3]":"users_voted",
-            "filters[id][$ne]":`${currentItemID}`
+    let videoData;
 
-          
-        }
-        
-       
-
-        const url = new URL(`${process.env.API_BASE_URL}/signs`);
-        Object.entries(params).forEach(([key, value]) => url.searchParams.append(key, value));
-
-        const apiToken = process.env.API_TOKEN;
-
-        const response = await fetch(url.toString(),{     
-            method:"GET",
-            cache:"no-cache",
-            headers:{
-                "content-type":"application/json",
-                "Authorization": `Bearer ${apiToken}` 
+     if(typeReturn === 'not contain'){
+       videoData = await prisma.video.findMany({
+        skip:skip,
+        take: pageSize,
+        where:{
+          votes:{
+            none:{
+              userId: session?.user?.id
             }
-        })
-
-        const dataJson = await response.json();
-
-        if (!response.ok) {
-            throw new Error(dataJson.message || "Fail to fetch data")
+          }
         }
-         const filter = getVideosNotVotedByUser(dataJson, typeReturn, email)
-        return filter.slice(0,noOfItems)
-    } catch (error) {
-        console.log(error)
-        throw new Error("Fail to fetch data")
+      });
+     }else{
+
+      videoData  = await prisma.video.findMany({
+        skip:skip,
+        take:pageSize,
+        where:{
+          votes:{
+            some:{
+              userId: session?.user?.id
+            }
+          }
+        },
+        include:{
+          votes:{
+            select:{
+              voteType:true
+            }
+          }
+        }
+      })
+     }
+
+     if(!videoData){
+      throw new Error("Fail to fetch data");
+     }
+
+    
+    return { 
+      pages:totalPages,
+      count:totalCount,
+      data:videoData
     }
+
+  } catch (error) {
+    console.log(error);
+    throw new Error("Fail to fetch data");
+  }
 }
 
+// get similar data
+
+export async function getSimilarData(currentItemID:string) {
+  try {
+    const session = await auth()
+    const similarData = await prisma.video.findMany({
+      take: 3,
+      where: {
+        AND: [
+          {
+            id: { not: currentItemID }, // Exclude the current item
+          },
+          {
+            votes: {
+              none: {
+                userId: session?.user?.id 
+              }
+            }
+          }
+        ]
+      }
+    })
+   if(!similarData){
+    throw new Error("Fail to fetch data");
+   }
+
+   return similarData
+  } catch (error) {
+    console.log(error);
+    throw new Error("Fail to fetch data");
+  }
+}
 
 // get api data by id
 
-export async function getSignDataById(id:number){
-    try {
-
-        const params = {
-            "fields[0]":"video_name",
-            "fields[1]":"video_url",
-            "fields[2]":"description"
-          
-        }
-
-        const url = new URL(`${process.env.API_BASE_URL}/signs/${id}?populate=*`); 
-        Object.entries(params).forEach(([key, value]) => url.searchParams.append(key, value));
-
-        const apiToken = process.env.API_TOKEN;
-        const response = await fetch(url.toString(),{
-            method:"GET",
-            cache:"no-cache",          
-            headers:{
-                "content-type":"application/json",
-                "Authorization": `Bearer ${apiToken}` 
-            }
-        })
-
-       
-
-        const dataJson = await response.json();
-        // console.log(dataJson.data)
-        return dataJson.data
-
-
-    }catch (error) {
-        console.log(error)
-        throw new Error("Fail to fetch data")
+export async function getSignDataById(videoId: string) {
+  try {
+    const videoData = await prisma.video.findFirst({
+      where:{
+        id:videoId
+      }
+    })
+    if(!videoData){
+      throw new Error("Fail to fetch data");
     }
-
+    // console.log(videoData)
+    return videoData
+  } catch (error) {
+    console.log(error);
+    throw new Error("Fail to fetch data");
+  }
 }

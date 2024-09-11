@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "cypress:open": "cypress open"
@@ -18,18 +18,21 @@
     "clsx": "^2.1.1",
     "cypress": "^13.13.0",
     "framer-motion": "^11.3.4",
+    "js-cookie": "^3.0.5",
     "next": "14.2.3",
     "next-auth": "^5.0.0-beta.18",
     "npm": "^10.8.2",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.51.5",
+    "react-hot-toast": "^2.4.1",
     "tailwind-merge": "^2.3.0",
     "use-debounce": "^10.0.1",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

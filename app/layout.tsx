@@ -5,6 +5,8 @@ import Menu from "./ui/menu/menu";
 import { SessionProvider } from "next-auth/react";
 import MobileNav from "./ui/nav/mobileNav";
 import MobileContextProvider from "./ui/nav/mobileContext";
+import { Toaster } from "react-hot-toast";
+import PaginationContext from "./ui/pagination/paginationContext";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -22,10 +24,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.className}`}>
+        <Toaster/>
         <MobileContextProvider>
         <SessionProvider>
           <MobileNav/>
+         <PaginationContext>
          {children}
+         </PaginationContext>
         </SessionProvider>
         </MobileContextProvider>
       </body>

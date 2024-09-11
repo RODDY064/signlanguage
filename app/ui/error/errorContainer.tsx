@@ -4,9 +4,8 @@ import { motion } from 'framer-motion'
 
 export default function ErrorContainer({ title }:{title?:string}) {
   return (
-    <div className="w-full h-full mt-6 px-2 md:px-0">
-    <h1 className="px-2 md:px-0 pb-2 text-xl font-bold">{title ?? `Videos`}</h1>
-    <div className="w-full border-t border-black/20 h-[12rem] pt-24 flex flex-col  items-center">
+    
+    <div className="w-full h-[12rem] pt-24 flex flex-col  items-center">
        <div className='flex items-center gap-2'>
        <h1 className='text-lg text-red-600'>Something went wrong.Please try again</h1>
        <div className=''>
@@ -14,7 +13,6 @@ export default function ErrorContainer({ title }:{title?:string}) {
        </div>
        </div>
     </div>
-</div>
   )
 }
 
