@@ -8,7 +8,8 @@ import Similar from '@/app/ui/video/similar/similar'
 
 export default async function DynamicVideo({ params :{ id }}:{params:{id:string}}) {
 
-  const data = await getSignDataById(id)
+  // const data = await getSignDataById(id)
+  const data = null
   
   return (
   <>

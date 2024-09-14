@@ -14,7 +14,7 @@ export default function VideoContainer({ videoData }:{videoData: Video | null}) 
   return (
     <div className="w-full flex-[2] md:w-[45rem] 2xl:w-[1280px] max-sm:mb-10">
       <div className="w-full  h-[20rem]   md:h-[30rem] rounded-[20px] border border-black/10 relative md:mt-10 xl:mt-0 overflow-hidden">
-       {!videoData === null ?
+       {videoData !== null ?
         (<>
          <Ring/>
         </>):
