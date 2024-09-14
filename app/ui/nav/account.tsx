@@ -1,8 +1,7 @@
 "use client";
 
-import { getSession, useSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { get } from "http";
 import { getUserStats } from "@/app/server/data";
 import { createVideos } from "../form/populate";
 
@@ -59,8 +58,3 @@ export default function Account() {
   )
 }
 
-
-// function to calculate the percentage of the correctness and wrongness scores
-  function calculatePercentage(score:number, total:number){
-    return ((score/total)*100).toFixed(0)
-  }

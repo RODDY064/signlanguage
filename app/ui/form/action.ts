@@ -100,10 +100,6 @@ export async function createUser(data: z.infer<typeof CreateUserSchema>) {
 
 
 
-
-
-  // create videos 
-
  
 
  
