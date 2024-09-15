@@ -14,8 +14,8 @@ describe('Vote Testing',()=>{
         cy.url().should('include','video')
         cy.get('#vote_wrong').click()
         cy.get('#vote_wrong').click()
-        // cy.wait(2000)
-        // cy.get('#voted_wrong').should('be.visible')
+        cy.wait(2000)
+        cy.get('#voted_wrong').should('be.visible')
     
 
 
