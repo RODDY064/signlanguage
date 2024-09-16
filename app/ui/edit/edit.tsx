@@ -104,13 +104,13 @@ export default function Edit() {
                 {errors.description.message}
               </p>
             )}
-            <div className="flex flex-col items-center justify-center w-full 2xl:mt-10">
+            <div  onClick={()=>setRecorder({...recorder,isActive:true})}
+             className="flex flex-col items-center justify-center w-full 2xl:mt-10">
               <label
                 htmlFor="dropzone-file"
                 className="flex flex-col items-center justify-center w-full h-[10rem] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-sky-100"
               >
                 <div 
-                onClick={()=>setRecorder({...recorder,isActive:true})}
                 className="flex flex-col items-center justify-center pt-5 pb-6 mb-5">
                 <svg fill="#9ca3af" width="64px" height="64px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>video-camera</title> <path d="M30.395 6.362c-0.112-0.071-0.248-0.113-0.395-0.113-0.122 0-0.238 0.030-0.34 0.082l0.004-0.002-6.938 3.468c-0.106-1.426-1.287-2.543-2.729-2.548h-15.996c-1.518 0.002-2.748 1.232-2.75 2.75v12.001c0.002 1.518 1.232 2.748 2.75 2.75h15.996c1.443-0.005 2.623-1.122 2.729-2.538l0.001-0.009 6.939 3.468c0.097 0.050 0.211 0.080 0.333 0.080 0.001 0 0.002 0 0.003 0h-0c0.001 0 0.001 0 0.002 0 0.413 0 0.748-0.335 0.748-0.748 0-0.001 0-0.001 0-0.002v0-18c-0-0.268-0.141-0.503-0.352-0.636l-0.003-0.002zM21.246 22c-0.001 0.69-0.56 1.249-1.25 1.25h-15.996c-0.69-0.001-1.249-0.56-1.25-1.25v-12.001c0.001-0.69 0.56-1.249 1.25-1.25h15.996c0.69 0.001 1.249 0.56 1.25 1.25v12.001zM29.25 23.787l-6.504-3.25v-9.073l6.504-3.251z"></path> </g></svg>
                   <p className="mb-2 text-sm text-gray-400">

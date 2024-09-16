@@ -1,10 +1,10 @@
 "use client";
 import Image from "next/image";
-import { useRef , useEffect} from "react";
+import { useRef , useEffect, useState} from "react";
 import { ReactMediaRecorder, useReactMediaRecorder } from "react-media-recorder";
 
 export default function Recorder() {
-
+ const [streaming , setStreaming] = useState(false)
   return (
     <div className="w-full h-full top-0 bottom-0 fixed z-[90] bg-black/30 flex items-center justify-center">
       <ReactMediaRecorder
@@ -13,8 +13,11 @@ export default function Recorder() {
         return(<div
             className="w-[90%] h-[75hv] md:w-[70%] md:min-h-[82vh] bg-white 
             rounded-[38px] p-12 px-16">
-            <div className="w-full h-[28rem] border rounded-[25px] border-black/30 overflow-hidden p-[1px]">
-            <VideoPreview stream={previewStream}/>
+            <div className="w-full h-[70%] md:h-[26rem] border rounded-[25px] border-black/30 overflow-hidden p-[1px]">
+            {status === "idle" && <p>Click to record</p> }
+            {status === "acquiring_media" && <p>Acquiring media</p>}
+            {status === "recording" &&  <VideoPreview stream={previewStream}/>}
+            {status === "stopped" &&  <VideoPreview media={mediaBlobUrl}/>}
             </div>
             <div className="my-4 mt-6 flex justify-between">
              <div className="flex items-center gap-2">
@@ -31,7 +34,7 @@ export default function Recorder() {
                     <p className="text-md">Sop Recording</p>
                 </div>
              </div>
-             <p><p>{status}</p></p>
+            <p>{status}</p>
             </div>
           </div>)
       }}
@@ -41,7 +44,7 @@ export default function Recorder() {
 }
 
 
-const VideoPreview = ({ stream }: { stream: MediaStream | null }) => {
+const VideoPreview = ({ stream , media }: { stream?: MediaStream | null, media?:any }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
   
     useEffect(() => {
@@ -52,5 +55,12 @@ const VideoPreview = ({ stream }: { stream: MediaStream | null }) => {
     if (!stream) {
       return null;
     }
-    return <video ref={videoRef} width={"100%"} height={"800"} autoPlay controls />;
+    return (
+      <>
+       {!stream ? 
+         ( <video  width={"100%"} height={"900"} src={media} autoPlay controls />):
+         ( <video ref={videoRef} width={"100%"} height={"900"} autoPlay controls />)
+       }
+      </>
+    )
   };
