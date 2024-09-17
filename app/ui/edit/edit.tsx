@@ -21,6 +21,10 @@ export default function Edit() {
   const router = useRouter();
 
 
+  useEffect(()=>{
+   setUploadedFile(recorder.video)
+  },[recorder.video])
+
   const { register, handleSubmit, formState: { errors } } = useForm<UpdateDataSchemaType>({
     resolver: zodResolver(updateDataSchema),
   });
