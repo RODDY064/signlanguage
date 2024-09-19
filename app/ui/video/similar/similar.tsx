@@ -1,12 +1,9 @@
 import {  getSimilarData, Video } from '@/app/server/data'
 import { formatVideoId } from '@/utils/videoUrl';
-import Image from 'next/image'
 import Link from 'next/link'
 
 
 export default async function Similar({currentItemID}:{currentItemID:string}) {
-
-
 
   const data = await getSimilarData(currentItemID,)
 
@@ -25,7 +22,6 @@ export default async function Similar({currentItemID}:{currentItemID:string}) {
 
 
 const SimilarCard = ( { Data}:{ Data:Video[]}) => {
-
 
   return(
     <>

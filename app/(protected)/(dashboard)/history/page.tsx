@@ -13,6 +13,7 @@ import { formatVideoId } from '@/utils/videoUrl';
 
 export default  function History() {
    const [data,setData] = useState<Video[]>([])
+   const [firstRun,setFirstRun] = useState(true)
    const {pagination,setPage,setPagination} = usePagination()
    const [state, setState] = useState({
     success: false,
@@ -24,7 +25,7 @@ export default  function History() {
    async function fetchData() {
     try {
       const apiData = await getSignData({
-        pagination: pagination.current,
+        pagination:pagination.current,
         typeReturn: "contain",
       });
       if (apiData) {
@@ -59,7 +60,12 @@ export default  function History() {
   }
  
 
+
   useEffect(() => {
+    if(firstRun){
+      setPage(1)
+      setFirstRun(false)
+    }
     setState({
       loading:true,
       success:false,
