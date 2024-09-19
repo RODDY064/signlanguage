@@ -4,12 +4,14 @@ import { validateVideo } from "@/app/server/validate"
 import { useState, useEffect } from "react"
 import Cookies from "js-cookie"
 import toast from "react-hot-toast"
+import { useEdit } from "../edit/editContext"
 
 const ONE_DAY_IN_MS = 1; // Expire cookie in 1 day
 
 export default function Vote({id }:{id?:string}) {
   const [voted, setVoted] = useState<"correct" | "wrong">('correct')
   const [isVoted, setIsVoted] = useState<boolean>(false)
+  const { edit,setEdit } = useEdit()
 
   // Fetch the stored vote from cookies
   useEffect(() => {
@@ -37,6 +39,10 @@ export default function Vote({id }:{id?:string}) {
       toast.success('You have successfully voted')
       setVoted(vote)
       setIsVoted(true)
+      setEdit({
+        ...edit,
+        voterID:res?.voterID
+      })
       
       // Store the vote in cookies with a 1-day expiration
       Cookies.set(`video_${id}`, vote, { expires: ONE_DAY_IN_MS });
@@ -48,7 +54,7 @@ export default function Vote({id }:{id?:string}) {
   }
 
   return (
-    <div className={`flex flex-col md:flex-row gap-4 ${isVoted ? 'md:gap-2':'md:gap-6 '} items-center md:justify-end my-10`}>
+    <div className={`flex flex-col md:flex-row gap-4 ${isVoted ? 'md:gap-2':'md:gap-6 '} items-center md:justify-end mt-5 mb-4`}>
         <p className="font-medium">{!isVoted ? 'Please vote' : 'Voted :' }</p>
        {isVoted ? 
          (<>

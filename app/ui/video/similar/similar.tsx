@@ -1,14 +1,11 @@
 import {  getSimilarData, Video } from '@/app/server/data'
 import { formatVideoId } from '@/utils/videoUrl';
-import Image from 'next/image'
 import Link from 'next/link'
 
 
 export default async function Similar({currentItemID}:{currentItemID:string}) {
 
-
-
-  // const data = await getSimilarData(currentItemID,)
+  const data = await getSimilarData(currentItemID,)
 
   return (
    
@@ -16,7 +13,7 @@ export default async function Similar({currentItemID}:{currentItemID:string}) {
         <div className='w-[21rem] flex-[1] 2xl:w-[400px] h-full border border-black/20 rounded-[25px] p-2 text-black overflow-hidden'>
         <h3 className='font-medium text-xl p-4 pb-2'>Similar</h3>
         <div className='w-full h-full pt-0 flex flex-col items-center p-6 px-4 gap-4'>
-          {/* <SimilarCard Data={data}/> */}
+          <SimilarCard Data={data}/>
         </div>
         </div>
     </div>
@@ -25,7 +22,6 @@ export default async function Similar({currentItemID}:{currentItemID:string}) {
 
 
 const SimilarCard = ( { Data}:{ Data:Video[]}) => {
-
 
   return(
     <>

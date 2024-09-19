@@ -19,8 +19,10 @@ model User {
   votes         Vote[]   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  // login stamp 
   lastLogin DateTime? 
+  EdictedVideo EdictedVideo[]
+
+  DegreeOfVote DegreeOfVote[]
 }
  
 model Account {
@@ -73,8 +75,10 @@ model Video {
   final_gloss String?
   video_url   String
   votes       Vote[]  
+  edictedVideo EdictedVideo?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  DegreeOfVote DegreeOfVote?
 }
 
 model Vote {
@@ -88,5 +92,32 @@ model Vote {
   @@map("VoteUser")
   @@unique([userId, videoId])
   User User @relation(fields: [userId], references: [id])
+  DegreeOfVote DegreeOfVote?
 }
 
+model EdictedVideo {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  video_name  String
+  description String?
+  final_gloss String?
+  video_url   String
+  createdAt   DateTime @default(now())
+  videoId     String @unique @db.ObjectId
+  userId     String  @db.ObjectId
+  video     Video @relation(fields: [videoId], references: [id])
+  user     User  @relation(fields: [userId], references: [id])
+
+}
+
+model DegreeOfVote {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  degree    Int
+  voteId    String   @db.ObjectId  @unique
+  userId    String   @db.ObjectId 
+  videoId   String   @db.ObjectId  @unique
+  createdAt DateTime @default(now())
+  comment    String
+  vote  Vote  @relation(fields: [voteId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+  video Video @relation(fields: [videoId], references: [id])
+}

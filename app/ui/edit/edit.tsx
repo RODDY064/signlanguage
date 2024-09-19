@@ -15,7 +15,7 @@ const ONE_DAY_IN_MS = 1; // Cookies expiration in 1 day
 export default function Edit() {
   const [uploadedFile, setUploadedFile] = useState<File | undefined>(undefined);
   const [error, setError] = useState<string>("");
-  const { setEdit ,recorder, setRecorder} = useEdit();
+  const { setEdit ,recorder, setRecorder, edit} = useEdit();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const router = useRouter();
@@ -55,7 +55,10 @@ export default function Edit() {
       if (response.ok) {
         console.log("Form submitted successfully.");
         toast.success("Video update successfully");
-        setEdit(false);
+        setEdit({
+        ...edit,
+        isActive:false
+        });
         // Store the video vote in cookies with 1-day expiration
         Cookies.set(`video_${id}`, data.vote, { expires: ONE_DAY_IN_MS });
 
@@ -82,7 +85,7 @@ export default function Edit() {
       <div className="w-[90%] min-h-[70%] md:w-[70%] xl:w-[40%] md:min-h-[40rem] 2xl:h-[45rem] bg-white rounded-[12px] md:rounded-[15px] py-4 p-6">
         <div className="w-full flex items-center justify-between">
           <h1 className="text-xl text-blue-500">Edit</h1>
-          <div id="edit_close" onClick={() => setEdit(false)} className="">
+          <div id="edit_close" onClick={() => setEdit({...edit,isActive:false})} className="">
             <Image
               src="/icons/x.svg"
               width={24}
