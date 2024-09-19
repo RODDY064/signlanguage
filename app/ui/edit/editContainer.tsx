@@ -12,7 +12,7 @@ export default function EditContainer() {
   return (
     <>
         {edit.isActive && !recorder.isActive && <Edit/>}
-        {edit.isActive && recorder.isActive && <Recorder/>}
+        {/* {edit.isActive && recorder.isActive && <Recorder/>} */}
     </>
   )
 }

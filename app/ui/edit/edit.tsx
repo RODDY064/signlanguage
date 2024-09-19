@@ -111,7 +111,7 @@ export default function Edit() {
                 {errors.description.message}
               </p>
             )}
-            <div  onClick={()=>setRecorder({...recorder,isActive:true})}
+            <div  onClick={()=>{}}
              className="flex flex-col items-center justify-center w-full 2xl:mt-10">
               <label
                 htmlFor="dropzone-file"
