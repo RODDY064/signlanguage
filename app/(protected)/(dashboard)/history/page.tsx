@@ -9,6 +9,7 @@ import { auth } from "@/auth"
 import Link from "next/link"
 import { useEffect, useState } from "react";
 import { formatVideoId } from '@/utils/videoUrl';
+import React from "react";
 
 
 export default  function History() {
@@ -112,7 +113,7 @@ const HistoryCard = ({ data  }:{ data:Video})=>{
         </video>
       </div>
       <div className='py-2'>
-        <p className='text-lg px-2 truncate'><span className='text-sm text-black/60 '>Description : </span>{data.video_name}</p>
+        <p className='text-lg px-2 truncate'><span className='text-sm text-black/60 '>Description : </span>{data.new_video_name??data.video_name}</p>
        <div className="flex items-center justify-between">
        <p className={`text-md px-2 ${userVote === 'correct' ? 'text-green-600':'text-red-600'}`}><span className='text-sm text-black/60 '>Your vote : </span> {userVote || 'Not voted'}</p> 
         <Link href={`/video/${data.id}?id=${data.id}`} className="px-2 text-blue-600">edit</Link>

@@ -71,6 +71,7 @@ model VerificationToken {
 model Video {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   video_name  String
+  new_video_name  String?
   description String?
   final_gloss String?
   video_url   String

@@ -20,6 +20,9 @@ export default function Edit() {
   const id = searchParams.get("id");
   const router = useRouter();
 
+  useEffect(()=>{
+   console.log(uploadedFile)
+  },[uploadedFile])
 
   useEffect(()=>{
    setUploadedFile(recorder.video)
@@ -111,7 +114,7 @@ export default function Edit() {
                 {errors.description.message}
               </p>
             )}
-            <div  onClick={()=>{}}
+            <div  onClick={()=>setRecorder({...recorder,isActive:true})}
              className="flex flex-col items-center justify-center w-full 2xl:mt-10">
               <label
                 htmlFor="dropzone-file"
