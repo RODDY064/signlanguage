@@ -1010,11 +1010,6 @@ cidr-regex@^4.1.1:
   dependencies:
     ip-regex "^5.0.0"
 
-classnames@^2.2.1:
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.5.1.tgz#ba774c614be0f016da105c858e7159eae8e7687b"
-  integrity sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==
-
 clean-stack@^2.0.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/clean-stack/-/clean-stack-2.2.0.tgz#ee8472dbb129e727b31e8a10a427dee9dfe4008b"
@@ -1522,11 +1517,6 @@ fill-range@^7.1.1:
   integrity sha512-YsGpe3WHLK8ZYi4tWDg2Jy3ebRz2rXowDxnld4bkQB00cc/1Zw9AWnC0i9ztDJitivtQvaI9KaLyKrc+hBW0yg==
   dependencies:
     to-regex-range "^5.0.1"
-
-fix-webm-duration@^1.0.4:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/fix-webm-duration/-/fix-webm-duration-1.0.6.tgz#c2de812c5207ba01e0f0b3ae497e64edc45e6c1e"
-  integrity sha512-zVAqi4gE+8ywxJuAyV/rlJVX6CMtvyapEbQx6jyoeX9TMjdqAlt/FdG5d7rXSSkDVzTvS0H7CtwzHcH/vh4FPA==
 
 foreground-child@^3.1.0:
   version "3.3.0"
@@ -2222,11 +2212,6 @@ listr2@^3.8.3:
     through "^2.3.8"
     wrap-ansi "^7.0.0"
 
-lodash.merge@^4.5.0:
-  version "4.6.2"
-  resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
-  integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
-
 lodash.once@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.once/-/lodash.once-4.1.1.tgz#0dd3971213c7c56df880977d504c88fb471a97ac"
@@ -2255,7 +2240,7 @@ log-update@^4.0.0:
     slice-ansi "^4.0.0"
     wrap-ansi "^6.2.0"
 
-loose-envify@^1.1.0, loose-envify@^1.4.0:
+loose-envify@^1.1.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
   integrity sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==
@@ -3070,15 +3055,6 @@ promzard@^2.0.0:
   dependencies:
     read "^4.0.0"
 
-prop-types@^15.5.8:
-  version "15.8.1"
-  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
-  integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
-  dependencies:
-    loose-envify "^1.4.0"
-    object-assign "^4.1.1"
-    react-is "^16.13.1"
-
 proxy-from-env@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/proxy-from-env/-/proxy-from-env-1.0.0.tgz#33c50398f70ea7eb96d21f7b817630a55791c7ee"
@@ -3144,11 +3120,6 @@ react-hot-toast@^2.4.1:
   dependencies:
     goober "^2.1.10"
 
-react-is@^16.13.1:
-  version "16.13.1"
-  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
-  integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
-
 react-media-recorder@^1.7.1:
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/react-media-recorder/-/react-media-recorder-1.7.1.tgz#c208e4f090c6c7147da68606848a6ed2391ca4e6"
@@ -3156,28 +3127,6 @@ react-media-recorder@^1.7.1:
   dependencies:
     extendable-media-recorder "^6.6.5"
     extendable-media-recorder-wav-encoder "^7.0.68"
-
-react-record-webcam@^1.1.5:
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/react-record-webcam/-/react-record-webcam-1.1.5.tgz#6506071c0417a484ce526c00e4e732c043361e3e"
-  integrity sha512-G0PlDIkry756JBxN8bPkYGCDALEA0ngjsINWJGqDkQ8Xw4YEFnMIrRzHPn6lXO2YTyJPrPOzRxFKoSamfMyXZg==
-
-react-svg-inline@^2.1.0:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/react-svg-inline/-/react-svg-inline-2.1.1.tgz#532664006bf5b4f9ca2879d185e546df9a7476ef"
-  integrity sha512-mN7/qwq133dHMMQdtJRMtZ6tK1ynzOJMZBKR34blzv3HqQpNBsaOKXkEe1kN14hcJJhzrUbsB+uix2ZOpF4kQg==
-  dependencies:
-    classnames "^2.2.1"
-    prop-types "^15.5.8"
-
-react-video-recorder@^3.19.4:
-  version "3.19.4"
-  resolved "https://registry.yarnpkg.com/react-video-recorder/-/react-video-recorder-3.19.4.tgz#cfd12a1ea6e65b846db21011c99b0b0c31a26b4b"
-  integrity sha512-pUUEqoSoEUupiQgsUIIEaJHB4z1l3+AqlfD80XA0W+MMFjpGYPh5TtBVtU/anFKByBTx2/uf/fpa4UgsN70Opw==
-  dependencies:
-    fix-webm-duration "^1.0.4"
-    lodash.merge "^4.5.0"
-    react-svg-inline "^2.1.0"
 
 react@^18:
   version "18.3.1"

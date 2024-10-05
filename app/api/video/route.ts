@@ -1,16 +1,9 @@
 import { auth } from '@/auth';
 import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
-import formidable from 'formidable';
-import fs from 'fs';
+
 
 const prisma = new PrismaClient();
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
 
 export async function POST(request: Request) {
   try {
@@ -89,7 +82,7 @@ export async function POST(request: Request) {
   }
 }
 
-const uploadVideoToExternalAPI = async (video: File | null, id: string): Promise<string | null> => {
+ const uploadVideoToExternalAPI = async (video: File | null, id: string): Promise<string | null> => {
   if (!video) {
     throw new Error('No video file provided');
   }

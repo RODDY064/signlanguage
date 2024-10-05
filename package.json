@@ -29,8 +29,6 @@
     "react-hook-form": "^7.53.0",
     "react-hot-toast": "^2.4.1",
     "react-media-recorder": "^1.7.1",
-    "react-record-webcam": "^1.1.5",
-    "react-video-recorder": "^3.19.4",
     "tailwind-merge": "^2.3.0",
     "use-debounce": "^10.0.1",
     "zod": "^3.23.8"
