@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Edit from "./edit";
 import { useEdit } from "./editContext";
 import Recorder from "./recoder";
@@ -12,7 +13,7 @@ export default function EditContainer() {
   return (
     <>
         {edit.isActive && !recorder.isActive && <Edit/>}
-        {/* {edit.isActive && recorder.isActive && <Recorder/>} */}
+        {edit.isActive && recorder.isActive && <Recorder/>}
     </>
   )
 }
