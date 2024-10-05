@@ -10,6 +10,7 @@ export interface Video {
   video_name: string;
   video_url: string;
   description?: string | null;
+  new_video_name?: string | null;
   final_gross?: string | null;
   createdAt: Date;
   updatedAt: Date;
@@ -75,8 +76,11 @@ export async function getSignData({
             },
           },
         },
-        include: {
+        include: {     
           votes: {
+            where: {
+              userId: session?.user?.id,
+            },
             select: {
               voteType: true,
             },

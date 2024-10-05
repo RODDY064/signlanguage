@@ -20,6 +20,9 @@ export default function Edit() {
   const id = searchParams.get("id");
   const router = useRouter();
 
+  useEffect(()=>{
+   console.log(uploadedFile)
+  },[uploadedFile])
 
   useEffect(()=>{
    setUploadedFile(recorder.video)
@@ -43,7 +46,7 @@ export default function Edit() {
     }
 
     if (uploadedFile) {
-      formData.append("video", uploadedFile,"recording.mp4");
+      formData.append("video", uploadedFile);
     }
 
     try {
