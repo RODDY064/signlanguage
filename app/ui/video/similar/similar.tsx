@@ -32,7 +32,7 @@ const SimilarCard = ( { Data}:{ Data:Video[]}) => {
        <h3 className='text-lg font-medium text-white'>{item.video_name}</h3>
        </div>
        <video className='w-full h-full object-cover' >
-          <source src={`https://videos.vskuul.com/${formatVideoId(item.video_url)}`} type="video/mp4"/>
+          <source src={`https://videos.vskuul.com/storage/${formatVideoId(item.video_url)}`} type="video/mp4"/>
         </video>
       </div>
      </Link>

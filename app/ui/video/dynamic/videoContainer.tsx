@@ -18,7 +18,7 @@ export default function VideoContainer({ videoData }:{videoData: Video | null}) 
        {videoData !== null ? (
         <>
           <video controls className="w-full h-full">
-            <source src={`https://videos.vskuul.com/${formatVideoId(videoData.video_url)}`} type="video/mp4"/>
+            <source src={`https://videos.vskuul.com/storage/${formatVideoId(videoData.video_url)}`} type="video/mp4"/>
           </video>
         </>
        ) : (
