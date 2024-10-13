@@ -17,7 +17,10 @@ export default function VideoContainer({ videoData }:{videoData: Video | null}) 
       <div className="w-full  h-[20rem]   md:h-[28rem] rounded-[20px] border border-black/10 relative md:mt-10 xl:mt-0 overflow-hidden">
        {videoData !== null ? (
         <>
-          <video controls className="w-full h-full">
+          <video 
+        playsInline
+        preload="metadata"
+        autoPlay={false} controls className="w-full h-full">
             <source src={`https://videos.vskuul.com/storage/${formatVideoId(videoData.video_url)}`} type="video/mp4"/>
           </video>
         </>

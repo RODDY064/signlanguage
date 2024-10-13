@@ -31,7 +31,11 @@ const SimilarCard = ( { Data}:{ Data:Video[]}) => {
       <div className='absolute z-20 w-full h-full p-4 bg-black/40 group-hover/g:bg-black/60 flex flex-col justify-end'>
        <h3 className='text-lg font-medium text-white'>{item.video_name}</h3>
        </div>
-       <video className='w-full h-full object-cover' >
+       <video 
+       playsInline
+       preload="metadata"
+       autoPlay={false}
+       className='w-full h-full object-cover' >
           <source src={`https://videos.vskuul.com/storage/${formatVideoId(item.video_url)}`} type="video/mp4"/>
         </video>
       </div>

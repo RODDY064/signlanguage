@@ -108,7 +108,10 @@ const HistoryCard = ({ data  }:{ data:Video})=>{
   return(
     <div className='w-[90%] md:w-[20rem] h-[17rem] border border-black/30 cursor-pointer rounded-[25px] p-2'>
       <div className='w-full h-[10.5rem] rounded-2xl border border-black/10 overflow-hidden'>
-      <video  muted className='w-full h-full'>
+      <video
+       playsInline
+        preload="metadata"
+        autoPlay={false}  muted className='w-full h-full'>
             <source src={`https://videos.vskuul.com/storage/${formatVideoId(data.video_url)}`} type="video/mp4"/>
         </video>
       </div>
