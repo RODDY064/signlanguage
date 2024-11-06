@@ -3,9 +3,62 @@ import { formatVideoId } from '@/utils/videoUrl';
 import Link from 'next/link'
 
 
+
+
 export default async function Similar({currentItemID}:{currentItemID:string}) {
 
-  const data = await getSimilarData(currentItemID,)
+
+  function formatVideoId(videoId: string): string {
+    if(!videoId){
+      return ""
+    }
+    const formatted = videoId
+      .toLowerCase()
+      .replace(/mvi/, 'Mvi') 
+      .replace('_', ' '); 
+    
+      return `${formatted}.mp4`;
+  }
+
+
+
+  async function fetchData(currentItemID:string) {
+    const url = process.env.Base_Url
+    try {
+      const req = await fetch(`${url}/api/getSimilair`,{
+        method:"POST",
+        cache:'no-cache',
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify({id:currentItemID})
+      })
+  
+      if(!req.ok){
+        console.error("Error fetching data:", req.statusText);
+      }
+  
+      if(req.status === 200){
+        const data = await req.json()
+         // proccess the data
+    
+         const newData = data.data?.map((video:any) => {
+          return {
+            ...video,
+            url: `https://videos.vskuul.com/storage/${formatVideoId(video.video_url)}`,
+          };
+        });
+
+
+        return newData
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  
+
+  const data = await fetchData(currentItemID)
 
   return (
    
@@ -23,6 +76,11 @@ export default async function Similar({currentItemID}:{currentItemID:string}) {
 
 const SimilarCard = ( { Data}:{ Data:Video[]}) => {
 
+  if (!Data) {
+    return <div className='mt-12'>Loading...</div>;
+  } 
+
+
   return(
     <>
     {Data && Data?.map((item:any)=>(
@@ -32,11 +90,8 @@ const SimilarCard = ( { Data}:{ Data:Video[]}) => {
        <h3 className='text-lg font-medium text-white'>{item.video_name}</h3>
        </div>
        <video 
-       playsInline
-       preload="metadata"
-       autoPlay={false}
        className='w-full h-full object-cover' >
-          <source src={`https://videos.vskuul.com/storage/${formatVideoId(item.video_url)}`} type="video/mp4"/>
+          <source src={item.url} type="video/mp4"/>
         </video>
       </div>
      </Link>

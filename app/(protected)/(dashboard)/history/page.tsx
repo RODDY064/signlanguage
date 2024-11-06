@@ -1,11 +1,10 @@
 "use client";
 
-import { getSignData, Video } from "@/app/server/data"
+import { getSignData, getSignDataContain, Video } from "@/app/server/data"
 import ErrorContainer from "@/app/ui/error/errorContainer";
 import LoadingContainer from "@/app/ui/loading/loading";
 import Pagination from "@/app/ui/pagination/pagination";
 import { usePagination } from "@/app/ui/pagination/paginationContext";
-import { auth } from "@/auth"
 import Link from "next/link"
 import { useEffect, useState } from "react";
 import { formatVideoId } from '@/utils/videoUrl';
@@ -25,10 +24,15 @@ export default  function History() {
 
    async function fetchData() {
     try {
-      const apiData = await getSignData({
-        pagination:pagination.current,
-        typeReturn: "contain",
-      });
+      const apiDataReq = await  fetch("api/getSignDataContain",{
+        method: "GET",
+        cache:"default",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      const apiData = await apiDataReq.json();
+
       if (apiData) {
         setData(apiData.data);
         setState({

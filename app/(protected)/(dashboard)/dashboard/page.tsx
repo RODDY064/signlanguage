@@ -1,4 +1,3 @@
-export const dynamic = 'force-dynamic'
 
 import Search from "@/app/ui/search/search"
 import Container from "@/app/ui/video/container"

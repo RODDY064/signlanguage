@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import Card from "./card";
 import Pagination from "../pagination/pagination";
-import { getSignData , Video } from "@/app/server/data";
+import { getSignDataNotContain, Video } from "@/app/server/data";
 import { usePagination } from "../pagination/paginationContext";
 import ErrorContainer from "../error/errorContainer";
 import LoadingContainer from "../loading/loading";
@@ -12,6 +12,7 @@ import LoadingContainer from "../loading/loading";
 
 export default function Container() {
   const [data, setData] = useState<Video[]>([]);
+  const [paginatedData, setPaginatedData] = useState<any[]>([]);
   const { pagination , setPagination } = usePagination();
   const [state, setState] = useState({
     success: false,
@@ -26,10 +27,17 @@ export default function Container() {
   // Function to fetch data
   async function fetchData() {
     try {
-      const apiData = await getSignData({
-        pagination: pagination.current,
-        typeReturn: "not contain",
+      const apiDataReq = await fetch("api/getSignDataNotContain",{
+        method: "GET",
+        cache:"default",
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
+
+      const apiData = await apiDataReq.json();
+
+
       if (apiData) {
         setData(apiData.data);
         setFilteredData(apiData.data);
@@ -63,25 +71,51 @@ export default function Container() {
   }
 
   useEffect(() => {
-    setState({
-      loading:true,
-      success:false,
-      error:false
-    })
     fetchData();
-  }, [pagination.current]);
+  }, []);
 
+
+  
+
+  function formatVideoId(videoId: string): string {
+    if(!videoId){
+      return ""
+    }
+    const formatted = videoId
+      .toLowerCase()
+      .replace(/mvi/, 'Mvi') 
+      .replace('_', ' '); 
+    
+      return `${formatted}.mp4`;
+  }
   useEffect(() => {
-    if (query) {
-      setFilteredData(
-        data.filter((video) =>
+    // Process the data
+    const newData = data.map((video) => {
+      return {
+        ...video,
+        url: `https://videos.vskuul.com/storage/${formatVideoId(video.video_url)}`,
+      };
+    });
+
+    // Filter the data based on the query
+    const filtered = query
+      ? newData.filter((video) =>
           video.video_name.toLowerCase().includes(query.toLowerCase())
         )
-      );
-    } else {
-      setFilteredData(data);
-    }
-  }, [query, data]);
+      : newData;
+
+    setFilteredData(filtered);
+
+    // Paginate the filtered data
+    const startIndex = (pagination.current - 1) * pagination.pageSize;
+    const endIndex = startIndex + pagination.pageSize;
+    const paginated = filtered.slice(startIndex, endIndex);
+
+    setPaginatedData(paginated);
+
+    // console.log(paginated, 'paginatedData');
+  }, [query, data, pagination.current, pagination.pageSize]);
+
 
   return (
     <div className="w-full h-full mt-6 px-2 md:px-0">
@@ -96,7 +130,7 @@ export default function Container() {
         {state.error && <ErrorContainer/>}
         {!state.loading && !state.error && (
           <>
-            {filteredData.map((video: Video) => (
+            {paginatedData.map((video: Video) => (
               <Card key={video.id} video={video} />
             ))}
           </>

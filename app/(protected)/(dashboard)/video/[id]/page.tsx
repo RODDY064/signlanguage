@@ -6,7 +6,11 @@ import Similar from '@/app/ui/video/similar/similar'
 
 
 
-export default async function DynamicVideo({ params :{ id }}:{params:{id:string}}) {
+
+
+export default async function DynamicVideo({ params }: any) {
+
+  const { id } = await params
 
   const data = await getSignDataById(id)
   
