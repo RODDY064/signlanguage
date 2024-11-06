@@ -20,8 +20,8 @@ export default async function Dashboard() {
     className="w-full h-full relative right-0">
       <Suspense fallback={<SearchFallBack/>}>
       <Search/>
-      </Suspense>
       <Container />
+      </Suspense>
     </div>
     </div>
   )
